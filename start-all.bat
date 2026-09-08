@@ -18,3 +18,7 @@ timeout /t 2 /nobreak >nul
 
 :: Start frontend in a new window
 start "Standardify Frontend" cmd /k "cd /d ""%~dp0frontend"" && npm run dev"
+
+:: Wait for dev server to initialize and auto-open browser
+timeout /t 3 /nobreak >nul
+start http://localhost:5173
