@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import ForceGraph2D from "react-force-graph-2d";
+import { ForceGraph2D } from "react-force-graph";
 import { fetchGraph } from "../lib/api";
 
 const CATEGORY_COLORS = {
