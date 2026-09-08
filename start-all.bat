@@ -3,7 +3,7 @@ echo ================================================
 echo  Standardify — Starting Application
 echo ================================================
 echo.
-echo  Backend  -^> http://localhost:8000
+echo  Backend  -^> http://127.0.0.1:8000
 echo  Frontend -^> http://localhost:5173
 echo.
 echo  Press Ctrl+C in each window to stop.
@@ -11,7 +11,7 @@ echo ================================================
 echo.
 
 :: Start backend in a new window
-start "Standardify Backend" cmd /k "cd /d ""%~dp0backend"" && call venv\Scripts\activate.bat && uvicorn app.main:app --reload --port 8000"
+start "Standardify Backend" cmd /k "cd /d ""%~dp0backend"" && call venv\Scripts\activate.bat && uvicorn app.main:app --reload --host 127.0.0.1 --port 8000"
 
 :: Small delay so backend starts first
 timeout /t 2 /nobreak >nul
