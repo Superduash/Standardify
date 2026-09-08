@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+
+    /* Custom brand tokens */
+    --brand: 238 75% 58%;
+    --brand-light: 238 100% 95%;
+    --brand-dark: 238 75% 45%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  code, pre, .mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  /* ── Smooth scrollbars ── */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-zinc-100 dark:bg-zinc-900;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-zinc-300 dark:bg-zinc-700 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-zinc-400 dark:bg-zinc-600;
+  }
+
+  /* ── App layout ── */
+  .app-shell {
+    @apply flex h-screen overflow-hidden bg-zinc-50 dark:bg-zinc-950;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    @apply w-64 flex-shrink-0 border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex flex-col;
+  }
+
+  .sidebar-nav-item {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-lg mx-2 text-sm font-medium text-zinc-600 dark:text-zinc-400
+           hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100
+           transition-colors duration-150 cursor-pointer;
+  }
+
+  .sidebar-nav-item.active {
+    @apply bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300;
+  }
+
+  /* ── Main content area ── */
+  .main-content {
+    @apply flex-1 overflow-auto;
+  }
+
+  /* ── Panel header ── */
+  .panel-header {
+    @apply px-8 py-6 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900;
+  }
+
+  /* ── Chat bubble ── */
+  .chat-bubble-user {
+    @apply bg-indigo-600 text-white rounded-2xl rounded-br-sm px-4 py-3 max-w-lg ml-auto text-sm;
+  }
+
+  .chat-bubble-assistant {
+    @apply bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700
+           text-zinc-800 dark:text-zinc-200 rounded-2xl rounded-bl-sm px-4 py-3 max-w-2xl text-sm shadow-sm;
+  }
+
+  /* ── Citation pill ── */
+  .citation-pill {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-mono
+           bg-zinc-100 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-600;
+  }
+
+  /* ── Mode badge ── */
+  .mode-badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+  .mode-badge-groq    { @apply bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400; }
+  .mode-badge-gemini  { @apply bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400; }
+  .mode-badge-extractive { @apply bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400; }
+  .mode-badge-no_match { @apply bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400; }
+
+  /* ── Confidence badge ── */
+  .confidence-high   { @apply bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300; }
+  .confidence-medium { @apply bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300; }
+  .confidence-low    { @apply bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300; }
+
+  /* ── Standard card ── */
+  .std-card {
+    @apply bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm
+           hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-800
+           transition-all duration-200;
+  }
+
+  /* ── Gap item ── */
+  .gap-item {
+    @apply flex items-start gap-3 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30
+           border border-amber-200 dark:border-amber-800;
+  }
+
+  /* ── Search result ── */
+  .search-result {
+    @apply std-card cursor-pointer;
+  }
+
+  /* ── Input styles ── */
+  .app-input {
+    @apply w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900
+           px-4 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400
+           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
+           transition-all duration-150;
+  }
+
+  .app-textarea {
+    @apply app-input resize-none min-h-[120px];
+  }
+
+  /* ── Button styles ── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+           bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800
+           text-white text-sm font-semibold
+           transition-all duration-150 shadow-sm hover:shadow
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+           bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700
+           text-zinc-700 dark:text-zinc-300 text-sm font-medium
+           transition-all duration-150;
+  }
+
+  /* ── Spinner ── */
+  .spinner {
+    @apply w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin;
+  }
+}

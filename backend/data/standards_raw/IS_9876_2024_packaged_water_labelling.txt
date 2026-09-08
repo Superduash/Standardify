@@ -1,0 +1,77 @@
+IS 9876:2024 [SAMPLE] — Packaged Drinking Water — Labelling and Composition Requirements
+
+DISCLAIMER: This is a SAMPLE/PLACEHOLDER document generated for demonstration purposes only.
+It is NOT verbatim BIS text. Do not use for compliance purposes.
+
+BUREAU OF INDIAN STANDARDS
+[SAMPLE STANDARD]
+
+IS 9876:2024
+PACKAGED DRINKING WATER — LABELLING AND COMPOSITION REQUIREMENTS
+
+1. SCOPE
+1.1 This standard specifies the requirements for labelling, physicochemical composition, and
+microbiological quality of packaged drinking water (PDW) sold in rigid or semi-rigid plastic
+containers. It applies to:
+    (a) Packaged natural mineral water
+    (b) Packaged drinking water from treated municipal or ground sources
+1.2 This standard applies to packaged drinking water sold in containers from 200 mL to 20 L.
+1.3 This standard shall be read in conjunction with IS 9001:2025 [SAMPLE] for requirements
+pertaining to the plastic container itself.
+
+2. REFERENCES
+2.1 IS 9001:2025 [SAMPLE] — Drinking Water Containers Made of Plastics
+2.2 IS 10500:2012 — Drinking Water Specification (for composition limits)
+2.3 FSSAI Regulations on Packaged Drinking Water (Food Safety and Standards (Food Products
+    Standards and Food Additives) Regulations, 2011)
+
+3. DEFINITIONS
+3.1 Packaged drinking water: Water that is sealed in a container and intended for drinking.
+3.2 Mineral water: Naturally occurring underground water that has been collected at source and
+contains dissolved minerals in defined concentrations.
+3.3 Treated water: Water obtained from any source and subjected to filtration, purification,
+or other treatment processes to meet potability standards.
+
+4. LABELLING REQUIREMENTS
+4.1 Mandatory information: All packaged drinking water containers shall bear the following
+information on the label, clearly legible:
+    (a) Product name: "Packaged Drinking Water" or "Packaged Natural Mineral Water" as applicable
+    (b) Net content (volume in mL or L) in a font size proportional to the container size
+        (minimum 3 mm for containers < 1 L, minimum 4 mm for containers ≥ 1 L)
+    (c) Name, address, and contact details of the manufacturer/packer
+    (d) Batch number / Lot number prefixed by "Batch No.:" or "Lot No.:"
+    (e) Date of manufacture (DOM) in DD/MM/YYYY format
+    (f) Best-before date in DD/MM/YYYY format — not more than 12 months from DOM for PET
+        containers and 24 months for HDPE containers
+    (g) Storage conditions: "Store in a cool, dry place, away from direct sunlight"
+    (h) BIS certification mark and licence number
+4.2 Prohibited claims: Labels shall not carry claims such as "cures disease," "miracle water,"
+"alkaline" (unless pH is ≥ 8.0 and verified), or any claim that implies the water has
+therapeutic properties, unless supported by FSSAI-approved clinical evidence.
+4.3 Nutritional information: If any dissolved minerals are added or naturally present at
+significant levels (> 10% of RDA), a nutritional information table shall be provided.
+
+5. PHYSICOCHEMICAL COMPOSITION REQUIREMENTS
+5.1 The following parameters shall comply with IS 10500:2012 limits:
+    pH:                  6.5 to 8.5
+    Total dissolved solids (TDS):  ≤ 500 mg/L (desirable); ≤ 2000 mg/L (permissible)
+    Turbidity:           ≤ 1 NTU (desirable); ≤ 5 NTU (permissible)
+    Nitrate (as NO3):    ≤ 45 mg/L
+    Fluoride (as F):     1.0 mg/L (desirable); 1.5 mg/L (permissible)
+    Arsenic (as As):     ≤ 0.01 mg/L
+    Lead (as Pb):        ≤ 0.01 mg/L
+
+5.2 Disinfection residuals: For treated water, the free residual chlorine at point of filling
+shall be ≤ 0.2 mg/L.
+
+6. MICROBIOLOGICAL REQUIREMENTS
+6.1 Packaged drinking water shall be free from pathogenic microorganisms.
+6.2 The following microbiological limits shall be met:
+    Total coliform:      Not detectable in 100 mL
+    Faecal coliform (E. coli): Not detectable in 100 mL
+    Heterotrophic plate count (HPC): ≤ 500 CFU/mL at 35°C/48 h
+
+CLAUSE NOTES:
+- Clause 4 is the most commonly checked during inspections (labelling violations are frequent).
+- Clause 5 covers water quality parameters (cross-reference IS 10500:2012).
+- Clause 6 covers microbiological safety (critical for consumer health).

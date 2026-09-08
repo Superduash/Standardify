@@ -1,0 +1,77 @@
+IS 9001:2025 [SAMPLE] — Drinking Water Containers Made of Plastics — Safety Requirements
+
+DISCLAIMER: This is a SAMPLE/PLACEHOLDER document generated for demonstration purposes only.
+It is NOT verbatim BIS text. Do not use for compliance purposes.
+
+BUREAU OF INDIAN STANDARDS
+[SAMPLE STANDARD]
+
+IS 9001:2025
+DRINKING WATER CONTAINERS MADE OF PLASTICS — SAFETY AND QUALITY REQUIREMENTS
+
+1. SCOPE
+1.1 This standard specifies the requirements for rigid plastic containers, including bottles, jars,
+cans, and carboys, intended for storing, transporting, or dispensing drinking water or other
+potable liquids for human consumption. It applies to containers with a capacity ranging from
+200 mL to 25 L.
+1.2 This standard covers containers made from the following plastic materials:
+    (a) Polyethylene terephthalate (PET/PETE)
+    (b) High-density polyethylene (HDPE)
+    (c) Polycarbonate (PC)
+    (d) Polypropylene (PP)
+1.3 This standard does not apply to flexible pouches, disposable cups, or containers made of
+materials other than those listed in 1.2.
+
+2. REFERENCES
+2.1 IS 9876:2024 [SAMPLE] — Packaged Drinking Water — Labelling and Composition Requirements
+2.2 IS 10500:2012 — Drinking Water Specification
+2.3 IS 12229:1987 — Specification for polyethylene terephthalate (PET) for food contact use
+
+3. DEFINITIONS
+3.1 Food-contact surface: Any surface of the container that may come into contact with drinking
+water or potable liquids.
+3.2 Migration limit: The maximum permissible quantity of a substance that may migrate from the
+container material into the liquid it contains, expressed in mg/kg or mg/dm².
+3.3 Overall migration: The total amount of all substances that migrate from the container into
+a specified test liquid under defined conditions.
+
+4. MATERIAL REQUIREMENTS
+4.1 All plastics used in the manufacture of drinking water containers shall be of food-grade
+quality and shall conform to the respective raw material specifications.
+4.2 No recovered or recycled plastic material shall be used in any part of the container that
+forms a food-contact surface, unless such material has been certified under a recognized
+food-grade recycled plastic certification scheme.
+4.3 The plastic shall not contain any colouring matter, anti-oxidants, stabilizers, or other
+additives that are not listed in Schedule I of the Food Safety and Standards (Packaging)
+Regulations as permitted for food-contact use.
+4.4 Overall migration of substances from the container into food simulants shall not exceed
+60 mg/kg or 10 mg/dm², whichever is applicable, as per IS 9833.
+
+5. PHYSICAL AND MECHANICAL REQUIREMENTS
+5.1 Containers shall be capable of withstanding a vertical compressive load of at least 3 times
+the total weight of a filled container without permanent deformation exceeding 10% of original
+height.
+5.2 Containers shall not show leakage, cracking, or deformation when subjected to a drop test
+from a height of 1.2 m onto a rigid surface, when filled with water to 90% of nominal capacity.
+5.3 The wall thickness at any point shall not be less than 0.25 mm for bottles up to 2 L and
+not less than 0.50 mm for containers above 2 L capacity.
+5.4 The closure (cap/lid) shall form a hermetic seal. When tested at an internal pressure of
+30 kPa for 30 seconds, no leakage shall occur.
+
+6. LABELLING REQUIREMENTS
+6.1 Each container shall be permanently marked or labelled with the following information:
+    (a) Name and address of the manufacturer
+    (b) BIS certification mark and licence number
+    (c) Plastic identification code (resin code) as per IS 14534
+    (d) "Food Grade" or "Safe for Food Use" declaration
+    (e) Maximum temperature of use (°C)
+    (f) "Do not use if damaged" advisory
+6.2 The label shall be in English and may additionally be in any language listed in the Eighth
+Schedule of the Constitution of India.
+6.3 The plastic identification code shall be placed inside the universal recycling symbol and
+shall be of a height not less than 6 mm.
+
+CLAUSE NOTES:
+- Clause 4 covers material safety (migration limits are key for compliance testing).
+- Clause 5 covers physical durability.
+- Clause 6 covers labelling obligations.

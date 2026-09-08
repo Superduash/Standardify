@@ -1,0 +1,166 @@
+{
+  "nodes": [
+    {
+      "id": "IS_9000_2025",
+      "standard_no": "IS 9000:2025",
+      "title": "[SAMPLE] Safety Requirements for Household Electrical Appliances",
+      "category": "Electrical Safety",
+      "year": 2025
+    },
+    {
+      "id": "IS_9001_2025",
+      "standard_no": "IS 9001:2025",
+      "title": "[SAMPLE] Drinking Water Containers Made of Plastics",
+      "category": "Consumer Products",
+      "year": 2025
+    },
+    {
+      "id": "IS_9002_2025",
+      "standard_no": "IS 9002:2025",
+      "title": "[SAMPLE] Safety Requirements for Toys — General",
+      "category": "Consumer Products",
+      "year": 2025
+    },
+    {
+      "id": "IS_9002_2012",
+      "standard_no": "IS 9002:2012",
+      "title": "[SAMPLE] Safety Requirements for Toys (superseded)",
+      "category": "Consumer Products",
+      "year": 2012
+    },
+    {
+      "id": "IS_9999_2026",
+      "standard_no": "IS 9999:2026",
+      "title": "[SAMPLE] LED Lighting for General Purposes",
+      "category": "Electrical Safety",
+      "year": 2026
+    },
+    {
+      "id": "IS_9876_2024",
+      "standard_no": "IS 9876:2024",
+      "title": "[SAMPLE] Packaged Drinking Water — Labelling and Composition",
+      "category": "Food and Beverage",
+      "year": 2024
+    },
+    {
+      "id": "IS_9003_2026",
+      "standard_no": "IS 9003:2026",
+      "title": "[SAMPLE] Helmets for Two-Wheeler Riders",
+      "category": "Automotive Safety",
+      "year": 2026
+    },
+    {
+      "id": "IS_9003_2019",
+      "standard_no": "IS 9003:2019",
+      "title": "[SAMPLE] Helmets for Two-Wheeler Riders (superseded)",
+      "category": "Automotive Safety",
+      "year": 2019
+    },
+    {
+      "id": "IS_9004_2025",
+      "standard_no": "IS 9004:2025",
+      "title": "[SAMPLE] Packaged Food Labelling — General Requirements",
+      "category": "Food and Beverage",
+      "year": 2025
+    },
+    {
+      "id": "IS_9005_2025",
+      "standard_no": "IS 9005:2025",
+      "title": "[SAMPLE] Pressure Cookers for Domestic Use",
+      "category": "Household Appliances",
+      "year": 2025
+    }
+  ],
+  "edges": [
+    {
+      "source": "IS_9002_2025",
+      "target": "IS_9002_2012",
+      "relation": "supersedes",
+      "label": "supersedes"
+    },
+    {
+      "source": "IS_9003_2026",
+      "target": "IS_9003_2019",
+      "relation": "supersedes",
+      "label": "supersedes"
+    },
+    {
+      "source": "IS_9876_2024",
+      "target": "IS_9001_2025",
+      "relation": "references",
+      "label": "references (container spec)"
+    },
+    {
+      "source": "IS_9004_2025",
+      "target": "IS_9876_2024",
+      "relation": "references",
+      "label": "references (water labelling)"
+    },
+    {
+      "source": "IS_9999_2026",
+      "target": "IS_9000_2025",
+      "relation": "references",
+      "label": "references (appliance safety)"
+    },
+    {
+      "source": "IS_9002_2025",
+      "target": "IS_9000_2025",
+      "relation": "references",
+      "label": "references (electrical toys)"
+    },
+    {
+      "source": "IS_9005_2025",
+      "target": "IS_9000_2025",
+      "relation": "references",
+      "label": "references (electric pressure cookers)"
+    },
+    {
+      "source": "IS_9000_2025",
+      "target": "IS_9000_2025",
+      "relation": "belongs_to_category",
+      "label": "Electrical Safety"
+    },
+    {
+      "source": "IS_9999_2026",
+      "target": "IS_9999_2026",
+      "relation": "belongs_to_category",
+      "label": "Electrical Safety"
+    },
+    {
+      "source": "IS_9001_2025",
+      "target": "IS_9001_2025",
+      "relation": "belongs_to_category",
+      "label": "Consumer Products"
+    },
+    {
+      "source": "IS_9002_2025",
+      "target": "IS_9002_2025",
+      "relation": "belongs_to_category",
+      "label": "Consumer Products"
+    },
+    {
+      "source": "IS_9876_2024",
+      "target": "IS_9876_2024",
+      "relation": "belongs_to_category",
+      "label": "Food and Beverage"
+    },
+    {
+      "source": "IS_9004_2025",
+      "target": "IS_9004_2025",
+      "relation": "belongs_to_category",
+      "label": "Food and Beverage"
+    },
+    {
+      "source": "IS_9003_2026",
+      "target": "IS_9003_2026",
+      "relation": "belongs_to_category",
+      "label": "Automotive Safety"
+    },
+    {
+      "source": "IS_9005_2025",
+      "target": "IS_9005_2025",
+      "relation": "belongs_to_category",
+      "label": "Household Appliances"
+    }
+  ]
+}

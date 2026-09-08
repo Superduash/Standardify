@@ -1,0 +1,72 @@
+IS 9003:2026 [SAMPLE] — Helmets for Two-Wheeler Riders — Safety Requirements
+
+DISCLAIMER: This is a SAMPLE/PLACEHOLDER document generated for demonstration purposes only.
+It is NOT verbatim BIS text. Do not use for compliance purposes.
+
+BUREAU OF INDIAN STANDARDS
+[SAMPLE STANDARD]
+
+IS 9003:2026
+PROTECTIVE HELMETS FOR TWO-WHEELER RIDERS — REQUIREMENTS AND TEST METHODS
+
+1. SCOPE
+1.1 This standard specifies the performance requirements and test methods for protective helmets
+designed and manufactured for use by riders and pillion passengers on two-wheeled motor vehicles
+(motorcycles, scooters, and mopeds). This standard applies to:
+    (a) Full-face helmets (covering face, jaw, and chin)
+    (b) Open-face (three-quarter) helmets
+    (c) Half-shell (half-face) helmets
+1.2 This standard does not apply to bicycle helmets, sports helmets, industrial safety helmets,
+or military helmets.
+1.3 BIS certification (IS mark) under this standard is mandatory for all helmets sold in India
+as per the Central Motor Vehicles Rules.
+
+2. REFERENCES
+2.1 IS 4151:2015 — Protective helmets for scooter and motor cycle riders (superseded by this standard)
+2.2 IS 9003:2019 [SAMPLE] — Previous edition, superseded by this 2026 edition
+
+3. DEFINITIONS
+3.1 Shell: The outer rigid or semi-rigid component of the helmet providing the structural frame.
+3.2 Impact-absorbing liner: The internal layer, typically of expanded polystyrene (EPS), that
+attenuates impact energy.
+3.3 Retention system: The strap, buckle, and attachment mechanism that keeps the helmet on the head.
+3.4 Field of vision: The angular field within which a wearer can see while wearing the helmet.
+
+4. CONSTRUCTION REQUIREMENTS
+4.1 Shell: The shell shall be constructed from thermoplastic, thermoset, or composite material
+capable of resisting penetration and distributing impact loads.
+4.2 Impact-absorbing liner: The liner shall cover the entire interior surface of the shell and
+be at least 15 mm thick at any point within the testing headform coverage area.
+4.3 Retention system: The retention system shall include a chin strap of at least 25 mm width
+and shall be equipped with a quick-release buckle operable with one hand.
+4.4 Weight: The complete helmet mass shall not exceed 1.5 kg.
+4.5 Field of vision: The helmet shall provide a horizontal field of vision of not less than 210°
+and a vertical upward field of vision of not less than 7° from horizontal.
+
+5. PERFORMANCE REQUIREMENTS
+5.1 Impact absorption: When tested at impact points specified in Annex C, the peak linear
+acceleration transmitted to the headform shall not exceed 300 g for any single impact, and the
+Head Injury Criterion (HIC) shall not exceed 2 400.
+5.2 Penetration resistance: A striker of 3 kg with a 60° conical tip dropped from 1 m height
+shall not contact the headform.
+5.3 Retention system strength: The chin strap shall not elongate more than 35 mm when subjected
+to a dynamic load of 10 kg from a height of 750 mm.
+5.4 Roll-off resistance: The helmet shall not detach from the headform when subjected to the
+roll-off test as per Annex D.
+5.5 Chin strap abrasion resistance: The chin strap shall maintain its labelling and buckle
+function after 500 cycles of abrasion testing.
+
+6. MARKING
+6.1 Each helmet shall be permanently marked with:
+    (a) BIS mark and licence number (mandatory)
+    (b) Manufacturer name and address
+    (c) Month and year of manufacture
+    (d) Shell size (e.g., S, M, L, XL) and the corresponding head circumference range in mm
+    (e) Shell material (abbreviated)
+    (f) "Replace after any significant impact" advisory
+6.2 The BIS mark shall be on both the shell exterior and the chin strap.
+
+CLAUSE NOTES:
+- Clause 5.1 (impact absorption) is the primary safety test and most commonly failed.
+- Clause 4.3 (retention system) is frequently checked at point of sale.
+- Helmets must carry BIS mark — purchase of non-BIS helmet is illegal under Motor Vehicle rules.
