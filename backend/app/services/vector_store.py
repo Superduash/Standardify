@@ -106,34 +106,16 @@ class VectorStore:
 
     def keyword_search(self, keyword: str, top_k: int = 10) -> list[dict[str, Any]]:
         """
-        Naive keyword search: use ChromaDB's `where_document` contains filter.
-        Falls back gracefully if nothing found.
+        Search for documents using the BGE-M3 embedding service.
         """
         try:
             count = self._collection.count()
             if count == 0:
                 return []
-            results = self._collection.query(
-                query_texts=[keyword],
-                n_results=min(top_k, count),
-                include=["documents", "metadatas", "distances"],
-            )
-            output: list[dict[str, Any]] = []
-            ids_list = results.get("ids", [[]])[0]
-            docs_list = results.get("documents", [[]])[0]
-            metas_list = results.get("metadatas", [[]])[0]
-            dists_list = results.get("distances", [[]])[0]
-            for doc_id, doc, meta, dist in zip(ids_list, docs_list, metas_list, dists_list):
-                output.append(
-                    {
-                        "id": doc_id,
-                        "document": doc,
-                        "metadata": meta or {},
-                        "distance": dist,
-                        "score": float(1.0 - dist),
-                    }
-                )
-            return output
+            from app.services.embeddings_service import get_embeddings_service
+            emb_service = get_embeddings_service()
+            q_emb = emb_service.encode([keyword])[0]
+            return self.query(query_embedding=q_emb, top_k=top_k)
         except Exception as exc:
             logger.warning("keyword_search failed: %s", exc)
             return []

@@ -35,7 +35,7 @@ export default function GraphView() {
     fetchGraph()
       .then((data) => {
         // Exclude self-referencing category links from visual clutter if desired
-        const cleanLinks = (data.edges || []).filter(
+        const cleanLinks = (data.links || data.edges || []).filter(
           (e) => e.source !== e.target
         );
         setGraphData({

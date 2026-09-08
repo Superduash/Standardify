@@ -51,13 +51,23 @@ def search_standards(
         if len(r.get("document", "")) > 250:
             snippet += "…"
 
+        std_no = meta.get("standard_no", "Unknown")
+        clause = meta.get("clause_no") or None
+        sc = round(r.get("score", 0.0), 4)
+        cat = meta.get("category") or None
+
         items.append(
             SearchResultItem(
-                standard_no=meta.get("standard_no", "Unknown"),
+                standard_no=std_no,
+                standard_code=std_no,
                 title=meta.get("title", ""),
-                clause_no=meta.get("clause_no") or None,
+                clause_no=clause,
+                clause_number=clause,
                 snippet=snippet,
-                score=round(r.get("score", 0.0), 4),
+                text=snippet,
+                score=sc,
+                similarity_score=sc,
+                category=cat,
             )
         )
 

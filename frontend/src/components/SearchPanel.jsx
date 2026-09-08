@@ -163,11 +163,11 @@ export default function SearchPanel() {
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-indigo-400 text-sm">
-                      {res.standard_code || "BIS Standard"}
+                      {res.standard_no || res.standard_code || "BIS Standard"}
                     </span>
-                    {res.clause_number && (
+                    {(res.clause_no || res.clause_number) && (
                       <span className="text-xs bg-slate-700 text-slate-300 px-2 py-0.5 rounded font-mono">
-                        Cl. {res.clause_number}
+                        Cl. {res.clause_no || res.clause_number}
                       </span>
                     )}
                     {res.category && (
@@ -176,20 +176,20 @@ export default function SearchPanel() {
                       </span>
                     )}
                   </div>
-                  {res.similarity_score !== undefined && (
+                  {(res.similarity_score !== undefined || res.score !== undefined) && (
                     <span className="text-xs text-slate-400">
-                      Match: {(res.similarity_score * 100).toFixed(0)}%
+                      Match: {(((res.similarity_score ?? res.score)) * 100).toFixed(0)}%
                     </span>
                   )}
                 </div>
 
                 <p className="text-sm text-slate-200 leading-relaxed">
-                  {res.text || res.content || res.excerpt}
+                  {res.snippet || res.text || res.content || res.excerpt}
                 </p>
 
-                {res.clause_title && (
+                {(res.title || res.clause_title) && (
                   <p className="text-xs text-slate-400 italic">
-                    Title: {res.clause_title}
+                    Title: {res.title || res.clause_title}
                   </p>
                 )}
               </div>

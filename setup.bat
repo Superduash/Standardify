@@ -10,6 +10,11 @@ echo.
 echo [1/4] Creating Python virtual environment...
 cd /d "%~dp0backend"
 
+if not exist .env (
+    copy .env.example .env >nul
+    echo       Created backend .env from .env.example.
+)
+
 if not exist venv (
     python -m venv venv
     if errorlevel 1 (
@@ -51,6 +56,12 @@ echo       Ingestion complete.
 echo.
 echo [4/4] Installing frontend dependencies...
 cd /d "%~dp0frontend"
+
+if not exist .env (
+    copy .env.example .env >nul
+    echo       Created frontend .env from .env.example.
+)
+
 npm install --silent
 if errorlevel 1 (
     echo ERROR: npm install failed. Is Node.js 18+ installed?

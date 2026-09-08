@@ -7,66 +7,86 @@
 
 ## Overview
 
-**Standardify** is a Retrieval-Augmented Generation (RAG) assistant designed to make Indian Standards (BIS) easily searchable, interpretable, and actionable. It helps manufacturers, compliance officers, and consumers check product specifications against mandatory BIS requirements, trace clause dependencies, and detect compliance gaps.
+**Standardify** is an enterprise-grade Retrieval-Augmented Generation (RAG) assistant designed to make Indian Standards (BIS) easily searchable, interpretable, and actionable. It empowers manufacturers, compliance officers, and consumers to check product specifications against mandatory BIS requirements, trace clause dependencies, and detect compliance gaps before submitting for certification.
 
 ---
 
 ## Key Features
 
-- 💬 **Clause Q&A**: Ask technical compliance questions and receive answers with exact clause citations. Supports **zero-API-key mode** (extractive RAG fallback) or Groq / Google Gemini if configured.
-- 📋 **Gap Checker**: Paste product specifications to run automated compliance checks and receive a prioritized list of missing or non-compliant clauses.
-- 🔍 **Standards Search**: Rapid full-text and semantic search across indexed standards, categories, and mandates.
-- 🕸️ **Standards Graph**: Interactive 2D knowledge graph showing cross-references, supersessions, and category hierarchies across BIS documents.
+- 💬 **Clause Q&A**: Ask technical compliance questions in natural language and receive answers with exact clause citations and confidence ratings. Works in **zero-API-key mode** (extractive RAG fallback) or with Groq (`llama-3.3-70b-versatile`) / Google Gemini (`gemini-2.0-flash`).
+- 📋 **Compliance Gap Checker**: Paste product descriptions and engineering specifications to run automated compliance checks and receive a prioritized list of missing or unaddressed clauses.
+- 🔍 **Standards Search**: Rapid semantic and keyword search across indexed standards, categories, and technical mandates with instant relevance scoring.
+- 🕸️ **Standards Knowledge Graph**: Interactive 2D force-directed relationship graph visualizing dependencies, cross-references, and supersession links among BIS standards.
 
 ---
 
 ## Tech Stack
 
-- **Frontend**: React 18, Vite, Tailwind CSS, Lucide / Heroicons, `react-force-graph-2d`
-- **Backend**: Python, FastAPI, ChromaDB (vector database), BAAI/bge-m3 embeddings, NetworkX
-- **LLM Engine**: Groq (Llama 3.3) / Google Gemini with transparent fallback to local extractive RAG
+- **Frontend**: React 18, Vite, Tailwind CSS (v4), `react-force-graph`, Axios
+- **Backend**: Python 3.12, FastAPI, ChromaDB (vector database), BAAI/bge-m3 embeddings (SentenceTransformers), NetworkX
+- **LLM Layer**: Groq / Google Gemini with transparent local extractive fallback
+- **Seed Data**: 8 Indian standards spanning Household Electricals, Packaged Water, Toys, Helmets, Packaged Food, Pressure Cookers, and LED Lighting
 
 ---
 
-## Quick Start
+## Quick Start (One-Click on Windows)
 
-### 1. Prerequisites
-- **Python 3.10+**
-- **Node.js 18+** & npm
+### 1. Setup (Run Once)
+Double click **`setup.bat`** (or run `setup.bat` in Command Prompt / PowerShell).
+This automatically:
+- Creates a Python virtual environment (`backend/venv`)
+- Installs all backend dependencies
+- Ingests the seed standards into ChromaDB with BGE-M3 embeddings
+- Installs all frontend npm dependencies
 
-### 2. Backend Setup
+### 2. Launch
+Double click **`start-all.bat`**.
+This opens both servers in parallel:
+- **Backend API**: `http://localhost:8000` (Swagger UI at `/docs`)
+- **Frontend Web UI**: `http://localhost:5173`
+
+---
+
+## Manual Setup
+
+### Backend
 ```bash
 cd backend
 python -m venv venv
-venv\Scripts\activate      # On Windows (or source venv/bin/activate on Linux/Mac)
+venv\Scripts\activate      # Windows (or source venv/bin/activate on Linux/Mac)
 pip install -r requirements.txt
-python ingest.py           # Ingests seed standards into ChromaDB
+python ingest.py           # Embeds seed standards into ChromaDB
 uvicorn app.main:app --reload --port 8000
 ```
 
-### 3. Frontend Setup
+### Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-Visit the app at **`http://localhost:5173`**.
+### Automated API Verification
+To test and verify all 5 API endpoints (`/api/health`, `/api/query`, `/api/search`, `/api/graph`, `/api/gap-check`):
+```bash
+cd backend
+python test_api.py
+```
 
 ---
 
-## Environment Variables (Optional)
+## Configuration (Optional)
 
-The application runs fully offline/locally with **zero API keys** via extractive fallback. To enable generative LLM responses, configure `backend/.env`:
+The application runs in **zero-API-key mode** right out of the box using extractive RAG. To enable generative AI answers:
 
+Edit `backend/.env`:
 ```env
-GROQ_API_KEY=your_groq_key_here
-GEMINI_API_KEY=your_gemini_key_here
-LLM_PROVIDER=groq          # or gemini / extractive
+GROQ_API_KEY=gsk_...
+GEMINI_API_KEY=AIza...
 ```
 
 ---
 
 ## Disclaimer
 
-The seed standards included in `backend/data/standards_raw/` are synthetic samples modeled after actual BIS standards for prototype and hackathon demonstration purposes.
+The seed standards included in `backend/data/standards_raw/` are structured samples modeled after actual BIS standards for hackathon demonstration and testing purposes.

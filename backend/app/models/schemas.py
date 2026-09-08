@@ -59,10 +59,15 @@ class GapCheckResponse(BaseModel):
 
 class SearchResultItem(BaseModel):
     standard_no: str
+    standard_code: Optional[str] = None
     title: str
     clause_no: Optional[str] = None
+    clause_number: Optional[str] = None
     snippet: str
+    text: Optional[str] = None
     score: float
+    similarity_score: Optional[float] = None
+    category: Optional[str] = None
 
 
 class SearchResponse(BaseModel):
