@@ -2,7 +2,7 @@ services:
   - type: web
     name: standardify-backend
     runtime: python
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt && python scripts/seed_demo_dataset.py
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: GROQ_API_KEY
@@ -15,15 +15,15 @@ services:
         value: BAAI/bge-m3
       - key: CHROMA_PERSIST_DIR
         value: ./data/chroma_store
-      - key: REGISTRY_DB_PATH
-        value: ./data/registry.db
       - key: CONFIDENCE_FLOOR
         value: "0.35"
-      - key: TOP_K
-        value: "5"
       - key: CACHE_TTL_SECONDS
         value: "86400"
       - key: LOG_LEVEL
         value: INFO
       - key: CORS_ORIGINS
-        sync: false
+        value: '["*"]'
+      - key: RATE_LIMIT_REQUESTS
+        value: "60"
+      - key: RATE_LIMIT_WINDOW_SECONDS
+        value: "60"

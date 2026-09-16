@@ -141,10 +141,14 @@ async def ask_endpoint(request: AskRequest) -> AskResponse:
 
     # 4. Quota-Aware Cache Lookup (Exact match -> Semantic match)
     cached_result = get_exact_cache(question)
+    hit_type = "exact" if cached_result else None
     if cached_result is None:
         cached_result = get_semantic_cache(question, query_vector)
+        if cached_result is not None:
+            hit_type = "semantic"
 
     if cached_result is not None:
+        logger.info("Ask API cache_hit: true (%s)", hit_type)
         elapsed_ms = int((time.time() - start_time) * 1000)
         return AskResponse(
             answer=cached_result.text,
@@ -156,6 +160,9 @@ async def ask_endpoint(request: AskRequest) -> AskResponse:
             provider_used="cache",
             latency_ms=elapsed_ms,
         )
+
+    logger.info("Ask API cache_hit: false")
+
 
     # 5. LLM Generation
     prompt = build_grounded_prompt(question, candidate_clauses)

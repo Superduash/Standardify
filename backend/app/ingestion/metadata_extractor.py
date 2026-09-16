@@ -30,57 +30,91 @@ STANDARD_NO_REGEX = re.compile(
     re.IGNORECASE,
 )
 
-# Curated catalog mapping for standard demo standards (Standard No -> (Title, Category, Status))
-DEMO_CATALOG: dict[str, tuple[str, str, str]] = {
+# Curated catalog mapping for standard demo standards (Standard No -> (Title, Category, Status, superseded_by, last_amended_date))
+DEMO_CATALOG: dict[str, tuple[str, str, str, Optional[str], Optional[str]]] = {
     "IS 374:2019": (
         "Electric Ceiling Fans — Specification",
         "Electrical & Electronics",
         "Active",
+        None,
+        "2024-06-15",
+    ),
+    "IS 374:1979": (
+        "Electric Ceiling Fans (1979 Edition)",
+        "Electrical & Electronics",
+        "Superseded",
+        "IS 374:2019",
+        None,
     ),
     "IS 1293:2019": (
         "Plugs and Socket-Outlets for Household and Similar Purposes",
         "Electrical & Electronics",
         "Active",
+        None,
+        "2023-11-20",
+    ),
+    "IS 1293:2005": (
+        "Plugs and Socket-Outlets (2005 Edition)",
+        "Electrical & Electronics",
+        "Superseded",
+        "IS 1293:2019",
+        None,
     ),
     "IS 9000:2025": (
         "Household Electrical Appliances — Safety Specification",
         "Electrical & Electronics",
         "Active",
+        None,
+        None,
     ),
     "IS 9001:2025": (
         "Plastic Containers for Packaged Drinking Water — Specification",
         "Plastics & Packaging",
         "Active",
+        None,
+        None,
     ),
     "IS 9002:2025": (
         "Safety of Toys — Mechanical and Physical Properties",
         "Consumer Products",
         "Active",
+        None,
+        None,
     ),
     "IS 9003:2026": (
         "Protective Helmets for Two-Wheeler Riders — Specification",
         "Automotive & Safety",
         "Active",
+        None,
+        None,
     ),
     "IS 9004:2025": (
         "Packaged Food Products — Nutritional and Safety Labelling",
         "Food & Agriculture",
         "Active",
+        None,
+        None,
     ),
     "IS 9005:2025": (
         "Domestic Pressure Cookers — Safety and Performance",
         "Mechanical & Consumer Goods",
         "Active",
+        None,
+        None,
     ),
     "IS 9876:2024": (
         "Packaged Drinking Water — Quality and Labelling Specification",
         "Water & Environment",
         "Active",
+        None,
+        None,
     ),
     "IS 9999:2026": (
         "LED Lighting Systems for Domestic Use — Safety and Photobiological Specifications",
         "Electrical & Electronics",
         "Active",
+        None,
+        None,
     ),
 }
 
@@ -171,12 +205,14 @@ def extract_standard_meta(header_text: str, fallback_standard_no: Optional[str] 
 
     # Look up in curated demo catalog if available
     if std_no in DEMO_CATALOG:
-        title, category, status = DEMO_CATALOG[std_no]
+        entry = DEMO_CATALOG[std_no]
         return StandardMeta(
             standard_no=std_no,
-            title=title,
-            category=category,
-            status=status,
+            title=entry[0],
+            category=entry[1],
+            status=entry[2],
+            superseded_by=entry[3] if len(entry) > 3 else None,
+            last_amended_date=entry[4] if len(entry) > 4 else None,
         )
 
     # Generic extraction fallback

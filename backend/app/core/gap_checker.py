@@ -218,8 +218,10 @@ def generate_gap_summary(
     cache_key = f"gap_summary:{description.strip().lower()}"
     cached_res = cache.get_exact_llm_result(cache_key)
     if cached_res:
-        logger.info("Exact cache hit for gap summary on query: '%s'", description[:40])
+        logger.info("Gap summary cache_hit: true (exact)")
         return cached_res.text
+
+    logger.info("Gap summary cache_hit: false")
 
     # Build prompt for LLM
     matched_lines = [f"- {format_requirement_str(m)}" for m in matched[:5]] or ["(None specified)"]

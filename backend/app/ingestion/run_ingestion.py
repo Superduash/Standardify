@@ -20,12 +20,136 @@ import sqlite3
 import sys
 from typing import Any, Dict, Generator, List, Optional, Sequence
 
-from app.ingestion.metadata_extractor import DEMO_CATALOG
+from app.ingestion.metadata_extractor import DEMO_CATALOG, extract_standard_meta, tag_chunk
 from app.models.domain import Clause, StandardMeta
 
 logger = logging.getLogger(__name__)
 
 DEFAULT_REGISTRY_PATH = Path("./data/registry.db")
+
+# Curated demo clause corpus for offline demo seeding & testing
+CURATED_DEMO_CLAUSES: list[Clause] = [
+    Clause(
+        text="4.1 Material Requirements\nPlastic containers for packaged drinking water shall be made from virgin food grade polymers compliant with IS 9001:2025. Recycled plastics are strictly prohibited.",
+        page_no=2,
+        standard_no="IS 9001:2025",
+        clause_no="4.1",
+        section_title="Material Requirements",
+        document_title="Plastic Containers for Packaged Drinking Water — Specification",
+        category="Plastics & Packaging",
+        needs_review=False,
+    ),
+    Clause(
+        text="5.2 Drop Impact and Pressure Test\nThe filled bottle container shall withstand a free fall drop test from 1.2 m height onto a flat concrete surface without rupture or leakage. Hydrostatic pressure of 200 kPa must be maintained for 5 minutes.",
+        page_no=4,
+        standard_no="IS 9001:2025",
+        clause_no="5.2",
+        section_title="Drop Impact and Pressure Test",
+        document_title="Plastic Containers for Packaged Drinking Water — Specification",
+        category="Plastics & Packaging",
+        needs_review=False,
+    ),
+    Clause(
+        text="3.2 Mandatory Nutritional Labelling\nAll pre-packaged food items must display energy value, proteins, carbohydrates, total sugars, added sugars, fats, and sodium per 100g or per single serving on the principal display panel.",
+        page_no=3,
+        standard_no="IS 9004:2025",
+        clause_no="3.2",
+        section_title="Mandatory Nutritional Labelling",
+        document_title="Packaged Food Products — Nutritional and Safety Labelling",
+        category="Food & Agriculture",
+        needs_review=False,
+    ),
+    Clause(
+        text="4.5 Allergen Declarations and Date Marking\nPresence of gluten, nuts, dairy, soy, or shellfish allergens shall be clearly highlighted in bold type. Expiry date or Use By date must be prominently stamped.",
+        page_no=5,
+        standard_no="IS 9004:2025",
+        clause_no="4.5",
+        section_title="Allergen Declarations and Date Marking",
+        document_title="Packaged Food Products — Nutritional and Safety Labelling",
+        category="Food & Agriculture",
+        needs_review=False,
+    ),
+    Clause(
+        text="4.1 Physical and Mechanical Hazards\nToys intended for children under 36 months must not contain small parts that fit into the small parts cylinder (31.7 mm diameter) to eliminate choking hazards.",
+        page_no=2,
+        standard_no="IS 9002:2025",
+        clause_no="4.1",
+        section_title="Physical and Mechanical Hazards",
+        document_title="Safety of Toys — Mechanical and Physical Properties",
+        category="Consumer Products",
+        needs_review=False,
+    ),
+    Clause(
+        text="5.3 Sharp Edges and Points Test\nAccessible metal and glass edges on children toys shall be smooth or protected to prevent laceration injuries during normal play.",
+        page_no=4,
+        standard_no="IS 9002:2025",
+        clause_no="5.3",
+        section_title="Sharp Edges and Points Test",
+        document_title="Safety of Toys — Mechanical and Physical Properties",
+        category="Consumer Products",
+        needs_review=False,
+    ),
+    Clause(
+        text="6.1 Impact Absorption Test for Helmets\nProtective helmets for two-wheeler motorcycle riders shall be dropped onto flat and hemispherical steel anvils at 7.5 m/s. The peak acceleration transmitted to the headform shall not exceed 300g.",
+        page_no=6,
+        standard_no="IS 9003:2026",
+        clause_no="6.1",
+        section_title="Impact Absorption Test for Helmets",
+        document_title="Protective Helmets for Two-Wheeler Riders — Specification",
+        category="Automotive & Safety",
+        needs_review=False,
+    ),
+    Clause(
+        text="7.2 Retention System and Chin Strap\nThe chin strap retention mechanism shall not slip more than 25 mm under a dynamic 50 kg load test.",
+        page_no=8,
+        standard_no="IS 9003:2026",
+        clause_no="7.2",
+        section_title="Retention System and Chin Strap",
+        document_title="Protective Helmets for Two-Wheeler Riders — Specification",
+        category="Automotive & Safety",
+        needs_review=False,
+    ),
+    Clause(
+        text="5.1 Air Delivery and Speed Regulation\nElectric ceiling fans of 1200 mm sweep shall deliver a minimum air flow of 210 m3/min at rated voltage with an energy service value exceeding 4.0 m3/min/Watt.",
+        page_no=3,
+        standard_no="IS 374:2019",
+        clause_no="5.1",
+        section_title="Air Delivery and Speed Regulation",
+        document_title="Electric Ceiling Fans — Specification",
+        category="Electrical & Electronics",
+        needs_review=False,
+    ),
+    Clause(
+        text="7.4 Thermal Protection and Suspension Safety\nFan motor windings must incorporate thermal overload protection. Suspension downrod and safety shackle must withstand a 1000 N tensile pull test.",
+        page_no=7,
+        standard_no="IS 374:2019",
+        clause_no="7.4",
+        section_title="Thermal Protection and Suspension Safety",
+        document_title="Electric Ceiling Fans — Specification",
+        category="Electrical & Electronics",
+        needs_review=False,
+    ),
+    Clause(
+        text="4.2 Safety Valves and Bursting Pressure\nDomestic pressure cookers must be fitted with an operating pressure regulator, safety relief valve, and fusible safety plug that releases pressure safely before reaching 300 kPa.",
+        page_no=3,
+        standard_no="IS 9005:2025",
+        clause_no="4.2",
+        section_title="Safety Valves and Bursting Pressure",
+        document_title="Domestic Pressure Cookers — Safety and Performance",
+        category="Mechanical & Consumer Goods",
+        needs_review=False,
+    ),
+    Clause(
+        text="6.2 Photobiological and Blue Light Hazard\nDomestic LED lighting luminaires shall comply with Risk Group RG0 (Exempt) or RG1 (Low Risk) according to photobiological safety standards.",
+        page_no=5,
+        standard_no="IS 9999:2026",
+        clause_no="6.2",
+        section_title="Photobiological and Blue Light Hazard",
+        document_title="LED Lighting Systems for Domestic Use — Safety and Photobiological Specifications",
+        category="Electrical & Electronics",
+        needs_review=False,
+    ),
+]
 
 # Curated evaluation benchmark questions for Phase 1.6 Ingestion QA
 QA_BENCHMARK_QUERIES: list[tuple[str, str]] = [
@@ -147,12 +271,19 @@ def seed_registry_with_demo_catalog(db_path: Path | str = DEFAULT_REGISTRY_PATH)
     """
     init_registry_db(db_path)
     count = 0
-    for std_no, (title, category, status) in DEMO_CATALOG.items():
+    for std_no, entry in DEMO_CATALOG.items():
+        title = entry[0]
+        category = entry[1]
+        status = entry[2]
+        superseded_by = entry[3] if len(entry) > 3 else None
+        last_amended_date = entry[4] if len(entry) > 4 else None
         meta = StandardMeta(
             standard_no=std_no,
             title=title,
             category=category,
             status=status,
+            superseded_by=superseded_by,
+            last_amended_date=last_amended_date,
             source_url=f"https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/{std_no.replace(' ', '_')}",
         )
         upsert_standard(meta, db_path=db_path)
@@ -222,6 +353,69 @@ def list_all_standards(db_path: Path | str = DEFAULT_REGISTRY_PATH) -> List[Stan
                 )
             )
     return standards
+
+
+def ingest_demo_dataset(db_path: Path | str = DEFAULT_REGISTRY_PATH) -> int:
+    """
+    Seed the SQLite registry and upsert curated demo clauses into ChromaDB.
+
+    Args:
+        db_path: Filesystem path to SQLite registry database.
+
+    Returns:
+        int: Total number of clauses upserted to vector store.
+    """
+    from app.ingestion.embed_and_store import embed_and_upsert_clauses
+
+    # 1. Populate SQLite standards registry
+    seed_registry_with_demo_catalog(db_path=db_path)
+
+    # 2. Embed and upsert curated demo clauses
+    upserted = embed_and_upsert_clauses(CURATED_DEMO_CLAUSES)
+    return upserted
+
+
+def ingest_pdf_directory(pdf_dir: Path | str, db_path: Path | str = DEFAULT_REGISTRY_PATH) -> int:
+    """
+    Process all PDFs in a directory: extract, chunk, tag metadata, and store in SQLite + ChromaDB.
+
+    Args:
+        pdf_dir: Directory containing PDF files.
+        db_path: Path to SQLite registry database.
+
+    Returns:
+        int: Total number of clauses indexed.
+    """
+    from app.ingestion.clause_chunker import chunk_document
+    from app.ingestion.embed_and_store import embed_and_upsert_clauses
+    from app.ingestion.pdf_extract import extract_document
+
+    path = Path(pdf_dir)
+    pdf_files = list(path.glob("*.pdf"))
+    if not pdf_files:
+        logger.warning("No PDF files found in %s", pdf_dir)
+        return 0
+
+    all_tagged_clauses: list[Clause] = []
+
+    for pdf_file in pdf_files:
+        logger.info("Processing PDF: %s", pdf_file.name)
+        pages = extract_document(pdf_file)
+        raw_clauses = chunk_document(pages)
+
+        # Extract document metadata
+        first_page_text = pages[0].raw_text if pages else ""
+        meta = extract_standard_meta(first_page_text, fallback_standard_no=pdf_file.stem)
+        upsert_standard(meta, db_path=db_path)
+
+        # Tag each chunk with document metadata
+        for chunk in raw_clauses:
+            tagged = tag_chunk(chunk, document_meta=meta)
+            all_tagged_clauses.append(tagged)
+
+    if all_tagged_clauses:
+        return embed_and_upsert_clauses(all_tagged_clauses)
+    return 0
 
 
 def validate_ingestion_qa(
@@ -320,6 +514,20 @@ def validate_ingestion_qa(
         "passed": passed,
         "details": results_detail,
     }
+
+
+def validate_ingestion(db_path: Path | str = DEFAULT_REGISTRY_PATH) -> bool:
+    """
+    Validation helper returning boolean status for automated pipelines.
+
+    Args:
+        db_path: Filesystem path to SQLite registry.
+
+    Returns:
+        bool: True if validation passed.
+    """
+    res = validate_ingestion_qa()
+    return bool(res.get("passed", False))
 
 
 def main() -> None:
