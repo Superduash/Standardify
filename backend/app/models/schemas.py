@@ -162,4 +162,39 @@ class StatusResponse(BaseModel):
     last_amended_date: Optional[str] = Field(default=None, description="Date of last official amendment")
 
 
+# ── Phase 8.1 & 8.2: Standard Search & Autocomplete Schemas ───────────────────
+
+class SearchResult(BaseModel):
+    """Standard search result item combining exact, keyword, and title semantic matches."""
+
+    standard_no: str = Field(..., description="Indian Standard identifier")
+    title: str = Field(..., description="Official title or description of the standard")
+    category: Optional[str] = Field(default=None, description="Industry or technical category")
+    status: str = Field(default="Active", description="Lifecycle status")
+    relevance_score: float = Field(..., ge=0.0, le=1.0, description="Normalized relevance score")
+
+
+class SearchResponse(BaseModel):
+    """Ranked search results response."""
+
+    query: str = Field(..., description="Search query string")
+    total_results: int = Field(..., description="Total matching standards found")
+    results: List[SearchResult] = Field(..., description="Ranked list of matching standards")
+
+
+class SuggestItem(BaseModel):
+    """Autocomplete title suggestion item."""
+
+    standard_no: str = Field(..., description="Indian Standard identifier")
+    title: str = Field(..., description="Standard title")
+
+
+class SuggestResponse(BaseModel):
+    """Autocomplete suggestions response."""
+
+    query: str = Field(..., description="Query prefix")
+    suggestions: List[SuggestItem] = Field(..., description="Top matching suggestions (max 5)")
+
+
+
 
