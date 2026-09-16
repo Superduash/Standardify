@@ -96,10 +96,11 @@ All routes are prefixed with `/api/v1`:
 | `/api/v1/health/quota` | `GET` | LLM provider health and rate limit tracking |
 | `/api/v1/ask` | `POST` | Grounded compliance Q&A with exact clause citations and cache logging |
 | `/api/v1/gap-check` | `POST` | Automated product specification compliance gap analysis |
-| `/api/v1/graph` | `GET` | Full standards dependency, supersession, and reference graph |
+| `/api/v1/graph/full` | `GET` | Full standards dependency, supersession, and reference graph |
+| `/api/v1/graph/{standard_no}` | `GET` | N-hop subgraph centered on a specific standard |
 | `/api/v1/standards/search` | `GET` | Hybrid standard search (Exact > FTS5 Keyword > Semantic) |
+| `/api/v1/standards/suggest` | `GET` | Fast prefix autocomplete for search bars (<100ms) |
 | `/api/v1/standards/{standard_no}/status` | `GET` | Standard validity status and amendment history |
-| `/api/v1/standards/{standard_no}/requirements` | `GET` | Pre-extracted compliance checklist for a standard |
 
 ---
 
