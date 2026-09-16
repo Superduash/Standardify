@@ -169,3 +169,22 @@ class LLMResult:
 class LLMUnavailableError(Exception):
     """Raised when both primary (Groq) and fallback (Gemini) LLM providers are unavailable."""
     pass
+
+
+@dataclass
+class StatusInfo:
+    """
+    Lifecycle and amendment status for an Indian Standard (Phase 7.1).
+
+    Attributes:
+        standard_no: Standard identifier (e.g. 'IS 374:2019')
+        status: Lifecycle status ('Active', 'Superseded', 'Withdrawn', 'Under Revision')
+        superseded_by: Successor standard replacing this document, if superseded
+        last_amended_date: ISO date of most recent amendment or gazette notification
+    """
+
+    standard_no: str
+    status: str = "Active"
+    superseded_by: Optional[str] = None
+    last_amended_date: Optional[str] = None
+

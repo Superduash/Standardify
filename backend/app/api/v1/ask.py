@@ -19,6 +19,7 @@ from app.core.embeddings import embed_query
 from app.core.llm_client import generate_answer
 from app.core.prompts import build_grounded_prompt
 from app.core.retrieval import retrieve
+from app.core.status_tracker import get_status_warning
 from app.models.domain import LLMResult, LLMUnavailableError, RetrievedClause
 from app.models.schemas import AskRequest, AskResponse, CitedStandard
 
@@ -48,59 +49,66 @@ def _build_citations(clauses: List[RetrievedClause]) -> List[CitedStandard]:
     return citations
 
 
+def _build_warnings(citations: List[CitedStandard]) -> List[str]:
+    """Check lifecycle and amendment status of cited standards and assemble warnings."""
+    warnings: list[str] = []
+    seen_standards = set()
+
+    for c in citations:
+        std = c.standard_no
+        if std not in seen_standards:
+            seen_standards.add(std)
+            warn = get_status_warning(std)
+            if warn:
+                warnings.append(warn)
+
+    return warnings
+
+
 def _detect_and_retrieve_multi_standard(
     question: str,
     initial_clauses: List[RetrievedClause],
 ) -> List[RetrievedClause]:
     """
-    Evaluate multi-standard query heuristic and execute targeted per-standard retrieval.
-
-    Triggered when top retrieval candidates span >= 2 distinct standards with comparable relevance.
+    Detect multi-standard compound queries and perform targeted separate retrievals.
     """
-    if len(initial_clauses) < 2:
-        return initial_clauses[:3]
+    if not initial_clauses:
+        return []
 
-    # Collect distinct standards from initial retrieval
-    distinct_standards: list[str] = []
-    for c in initial_clauses:
-        if c.standard_no != "UNKNOWN" and c.standard_no not in distinct_standards:
-            distinct_standards.append(c.standard_no)
+    # Heuristic 1: check distinct standards in top-3
+    top3_standards = list(dict.fromkeys(c.standard_no for c in initial_clauses[:3] if c.standard_no != "UNKNOWN"))
 
-    if len(distinct_standards) >= 2:
-        top_std1 = distinct_standards[0]
-        top_std2 = distinct_standards[1]
+    if len(top3_standards) >= 2:
+        std_a, std_b = top3_standards[0], top3_standards[1]
+        logger.info("Multi-standard heuristic triggered for standards: %s and %s", std_a, std_b)
 
-        score1 = next((c.similarity_score for c in initial_clauses if c.standard_no == top_std1), 0.0)
-        score2 = next((c.similarity_score for c in initial_clauses if c.standard_no == top_std2), 0.0)
+        # Retrieve up to 3 clauses per candidate standard
+        clauses_a = retrieve(question, top_k=3, standard_filter=std_a)
+        clauses_b = retrieve(question, top_k=3, standard_filter=std_b)
 
-        # If secondary standard relevance is reasonably close to primary (delta <= 0.20)
-        if abs(score1 - score2) <= 0.20:
-            logger.info("Multi-standard reasoning triggered for '%s' and '%s'", top_std1, top_std2)
-            clauses_std1 = retrieve(question, top_k=3, standard_filter=top_std1)
-            clauses_std2 = retrieve(question, top_k=3, standard_filter=top_std2)
+        combined = clauses_a + clauses_b
+        return combined if combined else initial_clauses
 
-            combined = clauses_std1 + clauses_std2
-            combined.sort(key=lambda x: x.similarity_score, reverse=True)
-            return combined
-
-    return initial_clauses[:3]
+    return initial_clauses
 
 
 @router.post(
     "/ask",
     response_model=AskResponse,
-    summary="Answer question grounded in BIS standards",
+    summary="Ask questions grounded strictly in Indian Standards (BIS)",
+    description=(
+        "Retrieves relevant clauses from Indian Standards, computes confidence, "
+        "checks cache, and generates grounded plain-language answers with exact citations."
+    ),
 )
-async def ask_question(request: AskRequest) -> AskResponse:
+async def ask_endpoint(request: AskRequest) -> AskResponse:
     """
-    Grounded question-answering pipeline.
-
-    Flow:
-      1. Embed question and execute hybrid dense + BM25 retrieval.
+    Primary Q&A pipeline:
+      1. Retrieve top clauses via dense semantic + BM25 hybrid search.
       2. Evaluate evidence confidence (forces no-evidence return if below confidence floor).
       3. Perform exact and semantic cache check (serves hit without LLM call).
       4. If cache miss, generate grounded answer via Groq with Gemini fallback.
-      5. Assemble response with authoritative citations and confidence rating.
+      5. Assemble response with authoritative citations, status warnings, and confidence rating.
     """
     start_time = time.time()
     question = request.question.strip()
@@ -127,12 +135,14 @@ async def ask_question(request: AskRequest) -> AskResponse:
             latency_ms=elapsed_ms,
         )
 
-    # 3. Quota-Aware Cache Lookup (Exact match -> Semantic match)
+    # 3. Assemble citations & lifecycle status warnings
+    citations = _build_citations(candidate_clauses)
+    warnings = _build_warnings(citations)
+
+    # 4. Quota-Aware Cache Lookup (Exact match -> Semantic match)
     cached_result = get_exact_cache(question)
     if cached_result is None:
         cached_result = get_semantic_cache(question, query_vector)
-
-    citations = _build_citations(candidate_clauses)
 
     if cached_result is not None:
         elapsed_ms = int((time.time() - start_time) * 1000)
@@ -142,12 +152,12 @@ async def ask_question(request: AskRequest) -> AskResponse:
             confidence=confidence_result.value,
             confidence_label=confidence_result.label,
             citations=citations,
-            warnings=[],
+            warnings=warnings,
             provider_used="cache",
             latency_ms=elapsed_ms,
         )
 
-    # 4. LLM Generation
+    # 5. LLM Generation
     prompt = build_grounded_prompt(question, candidate_clauses)
 
     try:
@@ -159,7 +169,7 @@ async def ask_question(request: AskRequest) -> AskResponse:
             detail="AI inference providers (Groq and Gemini) are currently unavailable.",
         ) from exc
 
-    # 5. Store in Cache for Subsequent Runs
+    # 6. Store in Cache for Subsequent Runs
     set_cache(question, query_vector, llm_result)
 
     elapsed_ms = int((time.time() - start_time) * 1000)
@@ -170,7 +180,7 @@ async def ask_question(request: AskRequest) -> AskResponse:
         confidence=confidence_result.value,
         confidence_label=confidence_result.label,
         citations=citations,
-        warnings=[],
+        warnings=warnings,
         provider_used=llm_result.provider_used,  # type: ignore[arg-type]
         latency_ms=elapsed_ms,
     )

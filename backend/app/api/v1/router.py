@@ -12,6 +12,7 @@ from app.api.v1.ask import router as ask_router
 from app.api.v1.gap_check import router as gap_check_router
 from app.api.v1.graph import router as graph_router
 from app.api.v1.health import router as health_router
+from app.api.v1.standards import router as standards_router
 
 router = APIRouter()
 
@@ -20,5 +21,7 @@ router.include_router(health_router)
 router.include_router(ask_router)
 router.include_router(gap_check_router)
 router.include_router(graph_router)
+router.include_router(standards_router)
+
 
 

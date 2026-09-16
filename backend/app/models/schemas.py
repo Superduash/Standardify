@@ -151,3 +151,15 @@ class GraphResponse(BaseModel):
     total_edges: Optional[int] = Field(default=None, description="Total edges available in complete graph")
 
 
+# ── Phase 7.3: Status Tracking Schemas ───────────────────────────────────────
+
+class StatusResponse(BaseModel):
+    """Lifecycle and amendment status of an Indian Standard."""
+
+    standard_no: str = Field(..., description="Indian Standard identifier")
+    status: str = Field(..., description="Lifecycle status ('Active', 'Superseded', 'Withdrawn', 'Under Revision')")
+    superseded_by: Optional[str] = Field(default=None, description="Standard that superseded this document")
+    last_amended_date: Optional[str] = Field(default=None, description="Date of last official amendment")
+
+
+
