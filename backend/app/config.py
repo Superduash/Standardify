@@ -77,6 +77,19 @@ class Settings(BaseSettings):
         default=0.35,
         description="Minimum confidence score threshold for evidence validity",
     )
+    cors_origins: list[str] = Field(
+        default=["*"],
+        description="Allowed CORS origin URLs (default: ['*'] in dev)",
+    )
+    rate_limit_requests: int = Field(
+        default=60,
+        description="Max allowed requests per rate limit window for expensive endpoints",
+    )
+    rate_limit_window_seconds: int = Field(
+        default=60,
+        description="Duration of rate limit window in seconds",
+    )
+
 
 
 @lru_cache(maxsize=1)

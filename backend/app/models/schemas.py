@@ -196,5 +196,16 @@ class SuggestResponse(BaseModel):
     suggestions: List[SuggestItem] = Field(..., description="Top matching suggestions (max 5)")
 
 
+# ── Phase 9.1: Error Response Envelope ────────────────────────────────────────
+
+class ErrorResponse(BaseModel):
+    """Standardized API error response envelope."""
+
+    error: str = Field(..., description="Machine-readable error category or code")
+    detail: Any = Field(..., description="Human-readable explanation or field validation breakdown")
+    request_id: Optional[str] = Field(default=None, description="Unique correlation identifier for the request")
+
+
+
 
 
