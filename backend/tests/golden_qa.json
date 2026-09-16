@@ -1,4 +1,125 @@
 {
-  "_comment": "Phase 0 placeholder — populated in Phase 2.5 with ~20 question/expected-standard pairs",
-  "questions": []
+  "_description": "Standardify Golden QA Regression Dataset for Indian Standards Retrieval (Phase 2.5)",
+  "questions": [
+    {
+      "id": "Q01",
+      "question": "What are the material requirements for plastic containers used for packaged drinking water?",
+      "expected_standard": "IS 9001:2025",
+      "category": "Plastics & Packaging"
+    },
+    {
+      "id": "Q02",
+      "question": "What is the drop test height for packaged drinking water plastic bottles?",
+      "expected_standard": "IS 9001:2025",
+      "category": "Plastics & Packaging"
+    },
+    {
+      "id": "Q03",
+      "question": "What hydrostatic pressure must water bottle containers withstand during testing?",
+      "expected_standard": "IS 9001:2025",
+      "category": "Plastics & Packaging"
+    },
+    {
+      "id": "Q04",
+      "question": "Are recycled plastics allowed in the manufacture of drinking water bottles?",
+      "expected_standard": "IS 9001:2025",
+      "category": "Plastics & Packaging"
+    },
+    {
+      "id": "Q05",
+      "question": "What mandatory nutritional parameters must be listed on packaged food labels?",
+      "expected_standard": "IS 9004:2025",
+      "category": "Food & Agriculture"
+    },
+    {
+      "id": "Q06",
+      "question": "How must common allergens like gluten, dairy, and nuts be declared on food packaging?",
+      "expected_standard": "IS 9004:2025",
+      "category": "Food & Agriculture"
+    },
+    {
+      "id": "Q07",
+      "question": "What are the date marking requirements such as expiry date on pre-packaged foods?",
+      "expected_standard": "IS 9004:2025",
+      "category": "Food & Agriculture"
+    },
+    {
+      "id": "Q08",
+      "question": "What are the nutritional labelling rules for total and added sugars per serving?",
+      "expected_standard": "IS 9004:2025",
+      "category": "Food & Agriculture"
+    },
+    {
+      "id": "Q09",
+      "question": "What is the small parts cylinder test to prevent choking in toys for children under 36 months?",
+      "expected_standard": "IS 9002:2025",
+      "category": "Consumer Products"
+    },
+    {
+      "id": "Q10",
+      "question": "What are the physical and mechanical hazard specifications for children toys?",
+      "expected_standard": "IS 9002:2025",
+      "category": "Consumer Products"
+    },
+    {
+      "id": "Q11",
+      "question": "How are accessible sharp metal or glass edges tested on children toys?",
+      "expected_standard": "IS 9002:2025",
+      "category": "Consumer Products"
+    },
+    {
+      "id": "Q12",
+      "question": "What are the impact absorption test velocity and peak acceleration limits for two-wheeler helmets?",
+      "expected_standard": "IS 9003:2026",
+      "category": "Automotive & Safety"
+    },
+    {
+      "id": "Q13",
+      "question": "What is the maximum allowable slippage for helmet chin strap retention under load?",
+      "expected_standard": "IS 9003:2026",
+      "category": "Automotive & Safety"
+    },
+    {
+      "id": "Q14",
+      "question": "What anvil drop tests are performed on motorcycle protective helmets?",
+      "expected_standard": "IS 9003:2026",
+      "category": "Automotive & Safety"
+    },
+    {
+      "id": "Q15",
+      "question": "What is the minimum air delivery required for a 1200 mm sweep electric ceiling fan?",
+      "expected_standard": "IS 374:2019",
+      "category": "Electrical & Electronics"
+    },
+    {
+      "id": "Q16",
+      "question": "What tensile strength test is required for the suspension downrod of a ceiling fan?",
+      "expected_standard": "IS 374:2019",
+      "category": "Electrical & Electronics"
+    },
+    {
+      "id": "Q17",
+      "question": "What thermal overload protection must be incorporated in ceiling fan motor windings?",
+      "expected_standard": "IS 374:2019",
+      "category": "Electrical & Electronics"
+    },
+    {
+      "id": "Q18",
+      "question": "What safety relief valves and bursting pressure limits apply to domestic pressure cookers?",
+      "expected_standard": "IS 9005:2025",
+      "category": "Mechanical & Consumer Goods"
+    },
+    {
+      "id": "Q19",
+      "question": "What fusible plug and pressure regulator mechanisms are required on pressure cookers?",
+      "expected_standard": "IS 9005:2025",
+      "category": "Mechanical & Consumer Goods"
+    },
+    {
+      "id": "Q20",
+      "question": "What are the photobiological safety and blue light hazard risk groups for domestic LED lighting?",
+      "expected_standard": "IS 9999:2026",
+      "category": "Electrical & Electronics"
+    }
+  ]
 }

@@ -71,3 +71,78 @@ class Clause:
     def approx_clause_no(self) -> Optional[str]:
         """Backward compatibility alias for clause_no."""
         return self.clause_no
+
+
+@dataclass
+class RetrievedClause:
+    """
+    Clause chunk retrieved via dense or hybrid search enriched with scoring metrics.
+
+    Attributes:
+        clause: The underlying Clause domain object.
+        similarity_score: Combined normalized relevance score in [0.0, 1.0].
+        dense_score: Dense semantic similarity score (cosine or 1 - distance).
+        lexical_score: Normalized BM25/lexical match score.
+        retrieval_method: Strategy used ('dense', 'lexical', 'hybrid').
+    """
+
+    clause: Clause
+    similarity_score: float
+    dense_score: float = 0.0
+    lexical_score: float = 0.0
+    retrieval_method: str = "hybrid"
+
+    @property
+    def text(self) -> str:
+        """Alias for clause text."""
+        return self.clause.text
+
+    @property
+    def standard_no(self) -> str:
+        """Alias for clause standard_no."""
+        return self.clause.standard_no
+
+    @property
+    def clause_no(self) -> Optional[str]:
+        """Alias for clause clause_no."""
+        return self.clause.clause_no
+
+    @property
+    def page_no(self) -> int:
+        """Alias for clause page_no."""
+        return self.clause.page_no
+
+    @property
+    def section_title(self) -> Optional[str]:
+        """Alias for clause section_title."""
+        return self.clause.section_title
+
+    @property
+    def document_title(self) -> Optional[str]:
+        """Alias for clause document_title."""
+        return self.clause.document_title
+
+    @property
+    def category(self) -> Optional[str]:
+        """Alias for clause category."""
+        return self.clause.category
+
+
+@dataclass
+class ConfidenceResult:
+    """
+    Evidence confidence evaluation for a set of retrieved clauses.
+
+    Attributes:
+        value: Numerical confidence score in range [0.0, 1.0].
+        label: Qualitative confidence tier ('high', 'medium', 'low').
+        evidence_found: True if confidence meets or exceeds settings.confidence_floor.
+        top_similarity: Similarity score of the top-1 ranked clause.
+        agreement_count: Number of top retrieved chunks agreeing on the top standard.
+    """
+
+    value: float
+    label: str  # 'high' | 'medium' | 'low'
+    evidence_found: bool
+    top_similarity: float = 0.0
+    agreement_count: int = 1
