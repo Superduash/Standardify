@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: standardify-backend
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: LLM_PRIMARY_PROVIDER
+        value: groq
+      - key: EMBEDDING_MODEL_NAME
+        value: BAAI/bge-m3
+      - key: CHROMA_PERSIST_DIR
+        value: ./data/chroma_store
+      - key: REGISTRY_DB_PATH
+        value: ./data/registry.db
+      - key: CONFIDENCE_FLOOR
+        value: "0.35"
+      - key: TOP_K
+        value: "5"
+      - key: CACHE_TTL_SECONDS
+        value: "86400"
+      - key: LOG_LEVEL
+        value: INFO
+      - key: CORS_ORIGINS
+        sync: false

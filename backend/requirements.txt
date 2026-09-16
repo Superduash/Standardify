@@ -1,17 +1,50 @@
+# Standardify Backend — Python Dependencies
+# All packages pinned per backendplan.md §3 (locked tech stack).
+# Update versions only after verifying compatibility.
+
+# API Framework
 fastapi>=0.115.0
 uvicorn[standard]>=0.32.0
 pydantic>=2.10.0
 pydantic-settings>=2.6.0
 python-dotenv>=1.0.0
+
+# PDF Extraction
 PyMuPDF>=1.25.0
 pdfplumber>=0.11.0
 pytesseract>=0.3.10
 Pillow>=11.0.0
+
+# Embeddings (BGE-M3, local — no external rate limit)
+FlagEmbedding>=1.3.0
 sentence-transformers>=3.3.0
-chroma-hnswlib>=0.7.5
+
+# Vector DB
 chromadb>=0.6.0
+
+# RAG Orchestration
 llama-index-core>=0.12.0
+llama-index-vector-stores-chroma>=0.4.0
+
+# LLM Clients
 groq>=0.13.0
 google-genai>=1.12.0
+
+# Retries & Resilience
+tenacity>=9.0.0
+
+# Keyword Search / Hybrid Retrieval
+rank-bm25>=0.2.2
+
+# Knowledge Graph
 networkx>=3.4.0
+
+# Caching
+diskcache>=5.6.0
+
+# HTTP Client (tests, integration)
 httpx>=0.28.0
+
+# Testing
+pytest>=8.0.0
+pytest-asyncio>=0.24.0
