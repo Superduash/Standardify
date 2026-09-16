@@ -17,6 +17,8 @@ backend/.env
 
 # Chroma vector store (large, runtime-generated)
 backend/data/chroma/
+backend/data/chroma_store/
+backend/data/cache/
 
 # Node
 node_modules/

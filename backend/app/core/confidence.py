@@ -1,5 +1,5 @@
 """
-Standardify — Retrieval Confidence Scoring Formula.
+Standardify — Retrieval Confidence Scoring Formula (Phase 2.4).
 
 Evaluates evidence sufficiency and reliability across retrieved standard clauses.
 
@@ -9,8 +9,8 @@ Scoring Formula and Thresholds:
      as the foundational evidence baseline.
 
   2. Cross-Clause Consensus Agreement Bonus:
-     - If >= 2 chunks in the top results originate from the same standard: +0.05 bonus.
-     - If >= 3 chunks originate from the same standard: +0.10 bonus.
+     - If >= 2 chunks in the top results originate from the same standard: +0.04 bonus.
+     - If >= 3 chunks originate from the same standard: +0.08 bonus.
      - Total score is capped at 1.0.
 
   3. Qualitative Tiers:
@@ -60,6 +60,16 @@ def score(retrieved_clauses: Sequence[RetrievedClause]) -> ConfidenceResult:
     top_similarity = max(0.0, min(1.0, float(top_clause.similarity_score)))
     top_standard = top_clause.standard_no
 
+    # If top similarity is below confidence floor, force evidence_found = False
+    if top_similarity < settings.confidence_floor:
+        return ConfidenceResult(
+            value=round(top_similarity, 4),
+            label="low",
+            evidence_found=False,
+            top_similarity=round(top_similarity, 4),
+            agreement_count=0,
+        )
+
     # 2. Compute standard consensus agreement count across top candidates
     matching_standards = [
         c for c in retrieved_clauses
@@ -67,12 +77,12 @@ def score(retrieved_clauses: Sequence[RetrievedClause]) -> ConfidenceResult:
     ]
     agreement_count = len(matching_standards)
 
-    # Apply agreement bonus
+    # Apply agreement bonus only if top match is solid
     agreement_bonus = 0.0
     if agreement_count >= 3:
-        agreement_bonus = 0.10
+        agreement_bonus = 0.08
     elif agreement_count >= 2:
-        agreement_bonus = 0.05
+        agreement_bonus = 0.04
 
     final_score = min(1.0, top_similarity + agreement_bonus)
     final_score = round(final_score, 4)
@@ -92,6 +102,6 @@ def score(retrieved_clauses: Sequence[RetrievedClause]) -> ConfidenceResult:
         value=final_score,
         label=label,
         evidence_found=evidence_found,
-        top_similarity=top_similarity,
+        top_similarity=round(top_similarity, 4),
         agreement_count=agreement_count,
     )

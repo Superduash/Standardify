@@ -34,6 +34,29 @@ logger = logging.getLogger(__name__)
 
 COLLECTION_NAME = "bis_clauses"
 
+# Common stopwords to exclude from lexical BM25 matching
+STOPWORDS = {
+    "a", "about", "above", "after", "again", "against", "all", "am", "an", "and",
+    "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being",
+    "below", "between", "both", "but", "by", "can", "can't", "cannot", "could",
+    "did", "do", "does", "doing", "don't", "down", "during", "each", "few", "for",
+    "from", "further", "had", "has", "have", "having", "he", "her", "here", "hers",
+    "herself", "him", "himself", "his", "how", "i", "if", "in", "into", "is", "isn't",
+    "it", "its", "itself", "me", "more", "most", "my", "myself", "no", "nor", "not",
+    "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours", "ourselves",
+    "out", "over", "own", "same", "she", "should", "so", "some", "such", "than", "that",
+    "the", "their", "theirs", "them", "themselves", "then", "there", "these", "they",
+    "this", "those", "through", "to", "too", "under", "until", "up", "very", "was",
+    "wasn't", "we", "were", "weren't", "what", "when", "where", "which", "while", "who",
+    "whom", "why", "with", "won't", "would", "you", "your", "yours", "yourself", "yourselves",
+}
+
+
+def _tokenize(text: str) -> list[str]:
+    """Tokenize and filter stopwords for lexical indexing."""
+    tokens = [t.lower() for t in re.findall(r'\b\w+\b', text)]
+    return [t for t in tokens if len(t) > 2 and t not in STOPWORDS]
+
 
 class LlamaIndexBGEAdapter(BaseEmbedding):
     """
@@ -138,7 +161,7 @@ class RetrievalEngine:
         for idx in range(len(ids)):
             doc_text = docs[idx] if idx < len(docs) else ""
             metadata = metas[idx] if idx < len(metas) else {}
-            tokens = [t.lower() for t in re.findall(r'\b\w+\b', doc_text) if len(t) > 1]
+            tokens = _tokenize(doc_text)
 
             corpus.append({
                 "id": ids[idx],
@@ -209,8 +232,8 @@ class RetrievalEngine:
             for idx in range(len(r_ids)):
                 c_id = r_ids[idx]
                 dist = r_dists[idx]
-                # Convert cosine / L2 distance to similarity score in [0.0, 1.0]
-                dense_sim = max(0.0, 1.0 - (dist / 2.0))
+                # Cosine distance to similarity: cos_sim = 1.0 - dist
+                dense_sim = max(0.0, min(1.0, 1.0 - dist))
 
                 dense_candidates[c_id] = {
                     "text": r_docs[idx],
@@ -221,13 +244,13 @@ class RetrievalEngine:
         # ── 2. Lexical BM25 Search ────────────────────────────────────────────
         lexical_candidates: dict[str, float] = {}
         if self._bm25_index is not None and self._bm25_corpus:
-            query_tokens = [t.lower() for t in re.findall(r'\b\w+\b', question) if len(t) > 1]
+            query_tokens = _tokenize(question)
             if query_tokens:
                 bm25_scores = self._bm25_index.get_scores(query_tokens)
                 max_bm25 = max(bm25_scores) if len(bm25_scores) > 0 and max(bm25_scores) > 0 else 1.0
 
                 for idx, score in enumerate(bm25_scores):
-                    if score > 0:
+                    if score > 0.5:  # Minimum raw BM25 score threshold
                         item = self._bm25_corpus[idx]
                         std_no = item["metadata"].get("standard_no")
                         if standard_filter and std_no != standard_filter:
@@ -248,7 +271,6 @@ class RetrievalEngine:
                 meta = dense_info["metadata"]
                 dense_score = dense_info["dense_score"]
             else:
-                # Retrieve document metadata from BM25 corpus lookup
                 matching = next((item for item in self._bm25_corpus if item["id"] == cid), None)
                 if not matching:
                     continue
@@ -256,20 +278,22 @@ class RetrievalEngine:
                 meta = matching["metadata"]
                 dense_score = 0.0
 
-            # Enforce hard filter if standard_filter was specified
             std_no = meta.get("standard_no", "UNKNOWN")
             if standard_filter and std_no != standard_filter:
                 continue
 
-            # Hybrid score formula: 70% dense + 30% lexical with dual-match reinforcement
-            if dense_score > 0 and lex_score > 0:
-                combined_score = min(1.0, (0.70 * dense_score) + (0.30 * lex_score) + 0.05)
+            # If dense score is very low (<0.28), don't let spurious lexical boost inflate relevance
+            if dense_score < 0.28:
+                combined_score = dense_score
+                method = "dense"
+            elif dense_score > 0 and lex_score > 0:
+                combined_score = min(1.0, (0.75 * dense_score) + (0.25 * lex_score) + 0.05)
                 method = "hybrid"
             elif dense_score > 0:
                 combined_score = dense_score
                 method = "dense"
             else:
-                combined_score = lex_score * 0.75
+                combined_score = lex_score * 0.40
                 method = "lexical"
 
             clause_obj = Clause(
