@@ -183,6 +183,24 @@ class QuotaAwareCache:
 
         self.cache.set("semantic_index", index_entries, expire=expire_time)
 
+    def get_exact_llm_result(self, key_text: str) -> Optional[LLMResult]:
+        """Check exact-match cache by key string."""
+        return self.get_exact(key_text)
+
+    def set_exact_llm_result(self, key_text: str, result: LLMResult, ttl: Optional[int] = None) -> None:
+        """Store an LLMResult by exact key string without requiring an embedding."""
+        key = self._get_exact_key(key_text)
+        expire_time = ttl or self.ttl
+        self.cache.set(key, {
+            "text": result.text,
+            "latency_ms": result.latency_ms,
+            "used_clause_ids": result.used_clause_ids,
+        }, expire=expire_time)
+
+    def clear(self) -> None:
+        """Clear all entries from diskcache."""
+        self.cache.clear()
+
     def record_llm_call(self, provider: str) -> None:
         """Increment daily API call count for the specified provider."""
         today_key = f"quota_{date.today().isoformat()}_{provider.lower()}"
@@ -207,6 +225,7 @@ class QuotaAwareCache:
             "gemini_calls_today": int(self.cache.get(gemini_key, default=0)),
             "cache_hits_today": int(self.cache.get(cache_key, default=0)),
         }
+
 
 
 def get_cache() -> QuotaAwareCache:

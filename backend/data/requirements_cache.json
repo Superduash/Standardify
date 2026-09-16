@@ -1,0 +1,109 @@
+{
+  "_version": "1.0",
+  "standards": {
+    "IS 9001:2025": [
+      {
+        "standard_no": "IS 9001:2025",
+        "clause_no": "4.1",
+        "section_title": "Material Requirements",
+        "text": "Plastic containers shall be made from virgin food grade polymers; recycled plastics are strictly prohibited."
+      },
+      {
+        "standard_no": "IS 9001:2025",
+        "clause_no": "5.2",
+        "section_title": "Drop Impact and Pressure Test",
+        "text": "Filled bottle containers shall withstand a free-fall drop test from 1.2 m height onto a flat concrete surface without rupture or leakage."
+      },
+      {
+        "standard_no": "IS 9001:2025",
+        "clause_no": "5.2",
+        "section_title": "Drop Impact and Pressure Test",
+        "text": "Containers must withstand and maintain a hydrostatic pressure of 200 kPa for 5 minutes without leakage or deformation."
+      }
+    ],
+    "IS 9004:2025": [
+      {
+        "standard_no": "IS 9004:2025",
+        "clause_no": "3.2",
+        "section_title": "Mandatory Nutritional Labelling",
+        "text": "All pre-packaged food items must display energy value, proteins, carbohydrates, total sugars, added sugars, fats, and sodium per 100g or per single serving on the principal display panel."
+      },
+      {
+        "standard_no": "IS 9004:2025",
+        "clause_no": "4.5",
+        "section_title": "Allergen Declarations and Date Marking",
+        "text": "Presence of gluten, nuts, dairy, soy, or shellfish allergens shall be clearly highlighted in bold type."
+      },
+      {
+        "standard_no": "IS 9004:2025",
+        "clause_no": "4.5",
+        "section_title": "Allergen Declarations and Date Marking",
+        "text": "Expiry date or Use By date must be prominently stamped on the packaging."
+      }
+    ],
+    "IS 9002:2025": [
+      {
+        "standard_no": "IS 9002:2025",
+        "clause_no": "4.1",
+        "section_title": "Physical and Mechanical Hazards",
+        "text": "Toys intended for children under 36 months must not contain small parts that fit into the small parts cylinder (31.7 mm diameter) to eliminate choking hazards."
+      },
+      {
+        "standard_no": "IS 9002:2025",
+        "clause_no": "5.3",
+        "section_title": "Sharp Edges and Points Test",
+        "text": "Accessible metal and glass edges on children toys shall be smooth or protected to prevent laceration injuries during normal play."
+      }
+    ],
+    "IS 9003:2026": [
+      {
+        "standard_no": "IS 9003:2026",
+        "clause_no": "6.1",
+        "section_title": "Impact Absorption Test for Helmets",
+        "text": "Protective helmets shall be dropped onto flat and hemispherical steel anvils at 7.5 m/s with peak acceleration transmitted to the headform not exceeding 300g."
+      },
+      {
+        "standard_no": "IS 9003:2026",
+        "clause_no": "7.2",
+        "section_title": "Retention System and Chin Strap",
+        "text": "The chin strap retention mechanism shall not slip more than 25 mm under a dynamic 50 kg load test."
+      }
+    ],
+    "IS 374:2019": [
+      {
+        "standard_no": "IS 374:2019",
+        "clause_no": "5.1",
+        "section_title": "Air Delivery and Speed Regulation",
+        "text": "Electric ceiling fans of 1200 mm sweep shall deliver a minimum air flow of 210 m3/min at rated voltage with energy service value exceeding 4.0 m3/min/Watt."
+      },
+      {
+        "standard_no": "IS 374:2019",
+        "clause_no": "7.4",
+        "section_title": "Thermal Protection and Suspension Safety",
+        "text": "Fan motor windings must incorporate thermal overload protection."
+      },
+      {
+        "standard_no": "IS 374:2019",
+        "clause_no": "7.4",
+        "section_title": "Thermal Protection and Suspension Safety",
+        "text": "Suspension downrod and safety shackle must withstand a 1000 N tensile pull test."
+      }
+    ],
+    "IS 9005:2025": [
+      {
+        "standard_no": "IS 9005:2025",
+        "clause_no": "4.2",
+        "section_title": "Safety Valves and Bursting Pressure",
+        "text": "Domestic pressure cookers must be fitted with an operating pressure regulator, safety relief valve, and fusible safety plug that releases pressure safely before reaching 300 kPa."
+      }
+    ],
+    "IS 9999:2026": [
+      {
+        "standard_no": "IS 9999:2026",
+        "clause_no": "6.2",
+        "section_title": "Photobiological and Blue Light Hazard",
+        "text": "Domestic LED lighting luminaires shall comply with Risk Group RG0 (Exempt) or RG1 (Low Risk) photobiological safety standards."
+      }
+    ]
+  }
+}

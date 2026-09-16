@@ -78,3 +78,44 @@ class AskResponse(BaseModel):
     warnings: List[str] = Field(default_factory=list, description="Amendment or lifecycle status warnings")
     provider_used: Literal["groq", "gemini", "cache", "none"] = Field(..., description="Inference source or cache status")
     latency_ms: int = Field(..., ge=0, description="End-to-end processing latency in milliseconds")
+
+
+# ── Phase 5.5: Compliance Gap Checker Schemas ────────────────────────────────
+
+class GapCheckRequest(BaseModel):
+    """Compliance gap check request payload containing product description or specs."""
+
+    product_description: str = Field(
+        ...,
+        min_length=3,
+        description="Detailed product description, materials, or specifications for compliance review",
+        examples=["We manufacture 1-liter plastic drinking water bottles from virgin food-grade PET."],
+    )
+
+
+class GapCheckResponse(BaseModel):
+    """Deterministic compliance gap analysis response with matched and missing requirements."""
+
+    applicable_standards: List[str] = Field(
+        ...,
+        description="Indian Standards identified as applicable to the product",
+    )
+    matched_requirements: List[str] = Field(
+        ...,
+        description="Discrete technical requirements identified as satisfied or addressed in the description",
+    )
+    missing_requirements: List[str] = Field(
+        ...,
+        description="Mandatory or standard requirements not explicitly covered or missing from the description",
+    )
+    summary: str = Field(
+        ...,
+        description="Concise executive summary of compliance status and missing areas",
+    )
+    confidence: float = Field(
+        ...,
+        ge=0.0,
+        le=1.0,
+        description="Confidence score for applicable standard identification",
+    )
+
