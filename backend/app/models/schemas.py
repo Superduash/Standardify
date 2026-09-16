@@ -119,3 +119,35 @@ class GapCheckResponse(BaseModel):
         description="Confidence score for applicable standard identification",
     )
 
+
+# ── Phase 6.4: Standards Relationship Graph Schemas ──────────────────────────
+
+class GraphNode(BaseModel):
+    """Node in the standards relationship graph representing an Indian Standard."""
+
+    id: str = Field(..., description="Standard number identifier (e.g. 'IS 374:2019')")
+    label: str = Field(..., description="Display title or short name of the standard")
+    status: str = Field(default="Active", description="Lifecycle status ('Active', 'Withdrawn', 'Superseded')")
+    category: Optional[str] = Field(default=None, description="Industry or technical category")
+
+
+class GraphEdge(BaseModel):
+    """Directed edge in the standards relationship graph."""
+
+    source: str = Field(..., description="Source standard identifier")
+    target: str = Field(..., description="Target standard identifier")
+    relation: str = Field(
+        ...,
+        description="Relationship type ('supersedes', 'references', 'same_category')",
+    )
+
+
+class GraphResponse(BaseModel):
+    """Complete graph or localized subgraph network response."""
+
+    nodes: List[GraphNode] = Field(..., description="List of graph nodes")
+    edges: List[GraphEdge] = Field(..., description="List of directed relationship edges")
+    total_nodes: Optional[int] = Field(default=None, description="Total nodes available in complete graph")
+    total_edges: Optional[int] = Field(default=None, description="Total edges available in complete graph")
+
+

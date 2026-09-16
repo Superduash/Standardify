@@ -1,0 +1,203 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "Electric Ceiling Fans",
+      "status": "Active",
+      "category": "Electrical & Electronics",
+      "id": "IS 374:2019"
+    },
+    {
+      "label": "Electric Ceiling Fans (1979 Edition)",
+      "status": "Superseded",
+      "category": "Electrical & Electronics",
+      "id": "IS 374:1979"
+    },
+    {
+      "label": "Plugs and Socket-Outlets",
+      "status": "Active",
+      "category": "Electrical & Electronics",
+      "id": "IS 1293:2019"
+    },
+    {
+      "label": "Plugs and Socket-Outlets (2005 Edition)",
+      "status": "Superseded",
+      "category": "Electrical & Electronics",
+      "id": "IS 1293:2005"
+    },
+    {
+      "label": "Household Electrical Appliances Safety",
+      "status": "Active",
+      "category": "Electrical & Electronics",
+      "id": "IS 9000:2025"
+    },
+    {
+      "label": "Plastic Containers for Packaged Drinking Water",
+      "status": "Active",
+      "category": "Plastics & Packaging",
+      "id": "IS 9001:2025"
+    },
+    {
+      "label": "Safety of Toys",
+      "status": "Active",
+      "category": "Consumer Products",
+      "id": "IS 9002:2025"
+    },
+    {
+      "label": "Protective Helmets for Two-Wheeler Riders",
+      "status": "Active",
+      "category": "Automotive & Safety",
+      "id": "IS 9003:2026"
+    },
+    {
+      "label": "Protective Helmets for Motorcycle Riders (2015 Edition)",
+      "status": "Superseded",
+      "category": "Automotive & Safety",
+      "id": "IS 4151:2015"
+    },
+    {
+      "label": "Packaged Food Products - Labelling",
+      "status": "Active",
+      "category": "Food & Agriculture",
+      "id": "IS 9004:2025"
+    },
+    {
+      "label": "Domestic Pressure Cookers",
+      "status": "Active",
+      "category": "Mechanical & Consumer Goods",
+      "id": "IS 9005:2025"
+    },
+    {
+      "label": "Domestic Pressure Cookers (2017 Edition)",
+      "status": "Superseded",
+      "category": "Mechanical & Consumer Goods",
+      "id": "IS 2347:2017"
+    },
+    {
+      "label": "Packaged Drinking Water Specification",
+      "status": "Active",
+      "category": "Water & Environment",
+      "id": "IS 9876:2024"
+    },
+    {
+      "label": "LED Lighting Systems for Domestic Use",
+      "status": "Active",
+      "category": "Electrical & Electronics",
+      "id": "IS 9999:2026"
+    }
+  ],
+  "edges": [
+    {
+      "relation": "supersedes",
+      "source": "IS 374:2019",
+      "target": "IS 374:1979"
+    },
+    {
+      "relation": "same_category",
+      "source": "IS 374:2019",
+      "target": "IS 9000:2025"
+    },
+    {
+      "relation": "same_category",
+      "source": "IS 374:2019",
+      "target": "IS 1293:2019"
+    },
+    {
+      "relation": "same_category",
+      "source": "IS 374:2019",
+      "target": "IS 9999:2026"
+    },
+    {
+      "relation": "supersedes",
+      "source": "IS 1293:2019",
+      "target": "IS 1293:2005"
+    },
+    {
+      "relation": "same_category",
+      "source": "IS 1293:2019",
+      "target": "IS 9000:2025"
+    },
+    {
+      "relation": "same_category",
+      "source": "IS 1293:2019",
+      "target": "IS 9999:2026"
+    },
+    {
+      "relation": "references",
+      "source": "IS 9000:2025",
+      "target": "IS 1293:2019"
+    },
+    {
+      "relation": "same_category",
+      "source": "IS 9000:2025",
+      "target": "IS 9999:2026"
+    },
+    {
+      "relation": "same_category",
+      "source": "IS 9001:2025",
+      "target": "IS 9876:2024"
+    },
+    {
+      "relation": "references",
+      "source": "IS 9001:2025",
+      "target": "IS 9004:2025"
+    },
+    {
+      "relation": "same_category",
+      "source": "IS 9002:2025",
+      "target": "IS 9005:2025"
+    },
+    {
+      "relation": "supersedes",
+      "source": "IS 9003:2026",
+      "target": "IS 4151:2015"
+    },
+    {
+      "relation": "references",
+      "source": "IS 9003:2026",
+      "target": "IS 9002:2025"
+    },
+    {
+      "relation": "references",
+      "source": "IS 9004:2025",
+      "target": "IS 9001:2025"
+    },
+    {
+      "relation": "same_category",
+      "source": "IS 9004:2025",
+      "target": "IS 9876:2024"
+    },
+    {
+      "relation": "supersedes",
+      "source": "IS 9005:2025",
+      "target": "IS 2347:2017"
+    },
+    {
+      "relation": "references",
+      "source": "IS 9005:2025",
+      "target": "IS 9000:2025"
+    },
+    {
+      "relation": "references",
+      "source": "IS 9876:2024",
+      "target": "IS 9001:2025"
+    },
+    {
+      "relation": "references",
+      "source": "IS 9876:2024",
+      "target": "IS 9004:2025"
+    },
+    {
+      "relation": "references",
+      "source": "IS 9999:2026",
+      "target": "IS 9000:2025"
+    },
+    {
+      "relation": "references",
+      "source": "IS 9999:2026",
+      "target": "IS 1293:2019"
+    }
+  ]
+}
