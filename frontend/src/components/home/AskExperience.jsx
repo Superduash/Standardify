@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { askQuestion } from '../../api/endpoints'
 import { normalizeApiError } from '../../api/client'
@@ -16,13 +17,18 @@ import { AnswerPanel } from './AnswerPanel'
  * (see frontendplan.md §4).
  */
 export function AskExperience() {
-  const [question, setQuestion] = useState('')
+  const [searchParams] = useSearchParams()
+  const initialQ = (searchParams.get('q') || searchParams.get('question') || '').trim()
+
+  const [question, setQuestion] = useState(initialQ)
   const [loading, setLoading] = useState(false)
   const [response, setResponse] = useState(/** @type {import('../../api/types').AskResponse | null} */ (null))
   const [blockingError, setBlockingError] = useState(/** @type {string | null} */ (null))
   const [errorRequestId, setErrorRequestId] = useState(/** @type {string | undefined} */ (undefined))
   const inputRef = useRef(/** @type {HTMLInputElement | null} */ (null))
+  const hasAutoRunRef = useRef(false)
   const { showToast } = useToast()
+
 
   // Global "/" focuses the Ask input, unless the user is already typing
   // somewhere else — a small, real keyboard-accessibility affordance.
@@ -73,6 +79,15 @@ export function AskExperience() {
     },
     [loading, showToast]
   )
+
+  // Auto-run if query param is present on mount
+  useEffect(() => {
+    if (initialQ && !hasAutoRunRef.current) {
+      hasAutoRunRef.current = true
+      runAsk(initialQ)
+    }
+  }, [initialQ, runAsk])
+
 
   const handleSubmit = (e) => {
     e.preventDefault()

@@ -9,18 +9,8 @@ import { PlaceholderPage } from './pages/PlaceholderPage'
 // same honest placeholder component with page-specific copy; each becomes a
 // real page in its own phase (§8).
 const StandardsSearchPage = lazy(() => import('./pages/StandardsSearchPage'))
+const StandardDetailPage = lazy(() => import('./pages/StandardDetailPage'))
 
-const StandardDetailPlaceholder = lazy(() =>
-  Promise.resolve({
-    default: () => (
-      <PlaceholderPage
-        title="Standard Details & Lifecycle"
-        description="View complete standard metadata, lifecycle status, amendments, and relationship graph."
-        phase="Coming in Frontend Phase 2"
-      />
-    ),
-  })
-)
 
 
 const GapCheckPlaceholder = lazy(() =>
@@ -74,8 +64,9 @@ export function AppRouter() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/standards" element={<StandardsSearchPage />} />
-          <Route path="/standards/:standardNo" element={<StandardDetailPlaceholder />} />
+          <Route path="/standards/:standardNo" element={<StandardDetailPage />} />
           <Route path="/gap-check" element={<GapCheckPlaceholder />} />
+
           <Route path="/graph" element={<GraphPlaceholder />} />
           <Route path="*" element={<NotFoundPlaceholder />} />
 
