@@ -28,23 +28,27 @@ if not exist venv (
 
 :: -- 2. Install Python deps ----------------------
 echo.
-echo [2/4] Installing Python dependencies (this may take a few minutes)...
+echo [2/4] Installing Python dependencies...
+echo       NOTE: PyTorch, FlagEmbedding, and ChromaDB (~1.5-2 GB) are being downloaded.
+echo       Live download progress is shown below.
+echo.
 call venv\Scripts\activate.bat
-pip install --quiet --upgrade pip
-pip install --quiet -r requirements.txt
+pip install --upgrade pip
+pip install -r requirements.txt
 if errorlevel 1 (
     echo ERROR: pip install failed. Check requirements.txt and your internet connection.
     pause
     exit /b 1
 )
-echo       Python dependencies installed.
+echo.
+echo       Python dependencies installed successfully.
 
 :: -- 3. Ingest seed standards ---------------------
 echo.
 echo [3/4] Ingesting seed standards into ChromaDB...
 echo       NOTE: First run downloads the BGE-M3 embedding model (~1.1 GB).
 echo       Subsequent runs are instant.
-python ingest.py
+python scripts\seed_demo_dataset.py
 if errorlevel 1 (
     echo ERROR: Ingestion failed. See error above.
     pause
@@ -62,13 +66,13 @@ if not exist .env (
     echo       Created frontend .env from .env.example.
 )
 
-npm install --silent
+call npm install
 if errorlevel 1 (
     echo ERROR: npm install failed. Is Node.js 18+ installed?
     pause
     exit /b 1
 )
-echo       Frontend dependencies installed.
+echo       Frontend dependencies installed successfully.
 
 echo.
 echo ================================================
