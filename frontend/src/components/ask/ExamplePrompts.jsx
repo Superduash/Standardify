@@ -1,7 +1,8 @@
 const EXAMPLE_PROMPTS = [
   'What are the microbiological requirements for packaged drinking water?',
   'Which standard applies to ceiling fans?',
-  'What requirements should I check for my product?',
+  'What is the drop test height for plastic water bottles?',
+  'What are the key safety requirements under IS 374?',
 ]
 
 /**
