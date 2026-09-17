@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, Check, Copy, FileSearch, FileX2 } from 'lucide-react'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { ArrowLeft, Check, Copy, FileSearch, FileX2, GitFork, ShieldCheck } from 'lucide-react'
 import { getStandardStatus, getGraphForStandard } from '../api/endpoints'
-
 import { normalizeApiError } from '../api/client'
 import { useToast } from '../context/ToastContext'
+import { Breadcrumbs } from '../components/layout/Breadcrumbs'
 import { LifecycleBanner } from '../components/standard-detail/LifecycleBanner'
 import { RelationshipTeaser } from '../components/standard-detail/RelationshipTeaser'
 import { AskAboutStandardCTA } from '../components/standard-detail/AskAboutStandardCTA'
@@ -13,7 +13,6 @@ import { Button, buttonClasses } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { Skeleton } from '../components/ui/Skeleton'
 import { ErrorState } from '../components/ui/ErrorState'
-
 
 /** Skeleton loading view for StandardDetailPage */
 function StandardDetailSkeleton() {
@@ -53,6 +52,7 @@ function StandardDetailSkeleton() {
 export function StandardDetailPage() {
   const { standardNo: rawStandardNo } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const { showToast } = useToast()
 
   const standardNo = decodeURIComponent(rawStandardNo || '').trim()
@@ -120,6 +120,15 @@ export function StandardDetailPage() {
     }
   }
 
+  // Handle back navigation: use history back if from internal navigation, else fallback to /standards
+  const handleBackNavigation = () => {
+    if (window.history.length > 1 && location.key !== 'default') {
+      navigate(-1)
+    } else {
+      navigate('/standards')
+    }
+  }
+
   // 1. Loading state
   if (loading) {
     return (
@@ -153,7 +162,7 @@ export function StandardDetailPage() {
           <Button
             variant="secondary"
             size="md"
-            onClick={() => navigate(-1)}
+            onClick={handleBackNavigation}
           >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             Go back
@@ -180,19 +189,12 @@ export function StandardDetailPage() {
   return (
     <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10 space-y-6">
       {/* Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-text-muted">
-        <Link to="/" className="hover:text-primary">
-          Home
-        </Link>
-        <span>/</span>
-        <Link to="/standards" className="hover:text-primary">
-          Standards
-        </Link>
-        <span>/</span>
-        <span className="font-technical text-text font-medium truncate" aria-current="page">
-          {standardNo}
-        </span>
-      </nav>
+      <Breadcrumbs
+        items={[
+          { label: 'Standards', to: '/standards' },
+          { label: standardNo, isCode: true, current: true },
+        ]}
+      />
 
       {/* Header with Standard Identifier & Action Buttons */}
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-border pb-6">
@@ -228,13 +230,16 @@ export function StandardDetailPage() {
             )}
           </button>
 
-          <Link
-            to="/standards"
-            className="inline-flex items-center gap-1.5 rounded-[var(--radius-md)] border border-border bg-surface px-3 py-2 text-xs font-medium text-text-body transition-colors hover:bg-bg hover:text-text"
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleBackNavigation}
+            className="text-xs"
+            aria-label="Return to previous view"
           >
             <ArrowLeft className="h-3.5 w-3.5 text-text-muted" aria-hidden="true" />
-            Back to search
-          </Link>
+            Back
+          </Button>
         </div>
       </header>
 
@@ -244,6 +249,49 @@ export function StandardDetailPage() {
           <LifecycleBanner statusInfo={statusData} />
         </section>
       )}
+
+      {/* Next Best Action Strip */}
+      <section aria-label="Exploration actions" className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Link
+          to={`/graph?focus=${encodeURIComponent(standardNo)}`}
+          className="group flex items-center justify-between rounded-[var(--radius-md)] border border-border bg-surface p-3.5 text-left transition-all hover:border-primary/40 hover:shadow-xs"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-[var(--radius-sm)] bg-primary-light text-primary">
+              <GitFork className="h-4 w-4" aria-hidden="true" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-text group-hover:text-primary">
+                Explore Relationship Graph
+              </p>
+              <p className="text-[11px] text-text-muted">
+                Inspect 1–3 hop references, supersessions & domain links
+              </p>
+            </div>
+          </div>
+          <span className="font-technical text-xs font-medium text-primary">→</span>
+        </Link>
+
+        <Link
+          to={`/gap-check`}
+          className="group flex items-center justify-between rounded-[var(--radius-md)] border border-border bg-surface p-3.5 text-left transition-all hover:border-primary/40 hover:shadow-xs"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-[var(--radius-sm)] bg-teal-light text-teal">
+              <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-text group-hover:text-teal">
+                Run Compliance Gap Check
+              </p>
+              <p className="text-[11px] text-text-muted">
+                Evaluate product specs against Indian Standard requirements
+              </p>
+            </div>
+          </div>
+          <span className="font-technical text-xs font-medium text-teal">→</span>
+        </Link>
+      </section>
 
       {/* 1-Hop Subgraph Relationship Teaser */}
       <section aria-label="Related standards">

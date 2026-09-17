@@ -105,17 +105,36 @@ export function RequirementItem({ rawText, type = 'matched', className }) {
         </div>
       </div>
 
-      {/* Link to standard detail if available */}
+      {/* Action Links if standard parsed */}
       {standardNo && (
-        <Link
-          to={`/standards/${encodeURIComponent(standardNo)}`}
-          className="flex items-center gap-1 text-xs font-medium text-primary hover:text-primary-dark shrink-0 self-end sm:self-start pt-1"
-          aria-label={`View full standard for ${standardNo}`}
-        >
-          <FileText className="h-3.5 w-3.5" aria-hidden="true" />
-          <span>Details</span>
-          <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
-        </Link>
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0 self-end sm:self-start pt-1 text-xs">
+          <Link
+            to={`/standards/${encodeURIComponent(standardNo)}`}
+            className="flex items-center gap-1 font-medium text-primary hover:text-primary-dark"
+            title={`View full standard details for ${standardNo}`}
+          >
+            <FileText className="h-3.5 w-3.5" aria-hidden="true" />
+            <span>Details</span>
+          </Link>
+
+          <Link
+            to={`/?q=${encodeURIComponent(`What does ${standardNo} require regarding ${bodyText.slice(0, 60)}?`)}`}
+            className="flex items-center gap-1 font-medium text-text-muted hover:text-text"
+            title={`Ask AI about ${standardNo} requirement`}
+          >
+            <span>Ask AI</span>
+            <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+          </Link>
+
+          <Link
+            to={`/graph?focus=${encodeURIComponent(standardNo)}`}
+            className="flex items-center gap-1 font-medium text-text-muted hover:text-text"
+            title={`Explore relationship graph for ${standardNo}`}
+          >
+            <span>Graph</span>
+            <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+          </Link>
+        </div>
       )}
     </div>
   )

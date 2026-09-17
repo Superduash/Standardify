@@ -5,26 +5,26 @@ import { Card, CardDescription, CardTitle } from '../ui/Card'
 const FEATURES = [
   {
     icon: MessageSquareText,
-    title: 'Ask',
-    description: 'Plain-language questions, answered with the exact standard, clause, and page.',
+    title: 'Ask Grounded Q&A',
+    description: 'Plain-language engineering questions answered strictly from indexed Indian Standards with clause citations.',
     to: '/',
   },
   {
     icon: FileSearch,
-    title: 'Search',
-    description: 'Look standards up directly by product, keyword, or standard number.',
+    title: 'Standards Registry',
+    description: 'Search and filter active, superseded, and withdrawn standards by domain, number, or product title.',
     to: '/standards',
   },
   {
     icon: ShieldCheck,
-    title: 'Gap Checker',
-    description: 'Paste a product description and see which requirements are already met — and which are missing.',
+    title: 'Compliance Gap Checker',
+    description: 'Evaluate product specifications against mandatory BIS requirements to detect satisfied and missing clauses.',
     to: '/gap-check',
   },
   {
     icon: Waypoints,
-    title: 'Related Standards',
-    description: 'See which standards a given one supersedes, references, or shares a category with.',
+    title: 'Relationship Graph',
+    description: 'Explore multi-hop supersession trees, norm references, and domain connections across Indian Standards.',
     to: '/graph',
   },
 ]

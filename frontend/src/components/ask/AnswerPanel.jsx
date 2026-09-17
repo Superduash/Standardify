@@ -249,6 +249,35 @@ export function AnswerPanel({ loading, response }) {
                 </li>
               ))}
             </ul>
+
+            {/* Next Best Actions Loop */}
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-[var(--radius-md)] border border-border/80 bg-bg p-3 text-xs">
+              <span className="font-medium text-text-muted">
+                Continue investigation:
+              </span>
+
+              <div className="flex flex-wrap items-center gap-2">
+                {uniqueStandards[0] && (
+                  <Link
+                    to={`/graph?focus=${encodeURIComponent(uniqueStandards[0])}`}
+                    className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+                  >
+                    <span>Explore relationships for {uniqueStandards[0]}</span>
+                    <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+                  </Link>
+                )}
+
+                <span className="text-border">|</span>
+
+                <Link
+                  to="/gap-check"
+                  className="inline-flex items-center gap-1 font-medium text-teal hover:underline"
+                >
+                  <span>Check product compliance</span>
+                  <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
           </div>
         )}
       </Card>

@@ -196,7 +196,7 @@ export function StandardsSearchPage() {
           onChange={setQueryInput}
           onSubmit={handleSubmit}
           loading={loading}
-          autoFocus={!initialQuery}
+          autoFocus={!urlQuery}
         />
       </section>
 

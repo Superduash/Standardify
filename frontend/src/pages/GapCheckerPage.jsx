@@ -62,12 +62,41 @@ function GapResultsSkeleton() {
   )
 }
 
+const GAP_STORAGE_KEY = 'standardify_gap_session'
+
+function loadSavedGapSession() {
+  try {
+    const raw = sessionStorage.getItem(GAP_STORAGE_KEY)
+    if (!raw) return null
+    return JSON.parse(raw)
+  } catch {
+    return null
+  }
+}
+
+function saveGapSession(desc, resp) {
+  try {
+    sessionStorage.setItem(GAP_STORAGE_KEY, JSON.stringify({ description: desc, response: resp }))
+  } catch {
+    // Ignore storage quota errors
+  }
+}
+
+function clearGapSession() {
+  try {
+    sessionStorage.removeItem(GAP_STORAGE_KEY)
+  } catch {
+    // Ignore
+  }
+}
+
 export function GapCheckerPage() {
-  const [productDescription, setProductDescription] = useState('')
+  const saved = loadSavedGapSession()
+  const [productDescription, setProductDescription] = useState(saved?.description || '')
   const [loading, setLoading] = useState(false)
-  const [response, setResponse] = useState(null)
+  const [response, setResponse] = useState(saved?.response || null)
   const [error, setError] = useState(null)
-  const [hasSubmitted, setHasSubmitted] = useState(false)
+  const [hasSubmitted, setHasSubmitted] = useState(Boolean(saved?.response))
 
   const { showToast } = useToast()
 
@@ -83,6 +112,7 @@ export function GapCheckerPage() {
     try {
       const result = await checkGap(trimmed)
       setResponse(result)
+      saveGapSession(trimmed, result)
     } catch (err) {
       const normalized = normalizeApiError(err)
       setError(normalized)
@@ -97,6 +127,15 @@ export function GapCheckerPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleClear = () => {
+    clearGapSession()
+    setProductDescription('')
+    setResponse(null)
+    setError(null)
+    setHasSubmitted(false)
+    showToast('Cleared compliance analysis session.', 'success')
   }
 
   const applicableStandards = response?.applicable_standards || []
@@ -199,6 +238,20 @@ export function GapCheckerPage() {
         {/* Success Results View */}
         {!loading && !error && response && applicableStandards.length > 0 && (
           <div className="space-y-6 animate-in fade-in duration-200">
+            {/* Header with Clear Action */}
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-text-muted">
+                Analysis Results
+              </span>
+              <button
+                type="button"
+                onClick={handleClear}
+                className="text-xs font-medium text-text-muted hover:text-text underline"
+              >
+                Clear analysis
+              </button>
+            </div>
+
             {/* A. Executive Gap Summary Card */}
             <GapSummaryCard
               summary={response.summary}
@@ -233,22 +286,32 @@ export function GapCheckerPage() {
                       <Badge tone="primary">Applicable</Badge>
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 pt-2 border-t border-border/50 text-xs">
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-border/50 text-xs">
                       <Link
                         to={`/standards/${encodeURIComponent(std)}`}
                         className="font-medium text-primary hover:text-primary-dark"
                       >
-                        Standard Details →
+                        Details →
                       </Link>
 
-                      <Link
-                        to={`/?q=${encodeURIComponent(`What does ${std} require?`)}`}
-                        className="inline-flex items-center gap-1 text-text-muted hover:text-text"
-                        title={`Ask a grounded question about ${std}`}
-                      >
-                        <MessageSquareText className="h-3 w-3" aria-hidden="true" />
-                        Ask AI
-                      </Link>
+                      <div className="flex items-center gap-2.5">
+                        <Link
+                          to={`/graph?focus=${encodeURIComponent(std)}`}
+                          className="text-text-muted hover:text-text font-medium"
+                          title={`Explore relationships for ${std}`}
+                        >
+                          Graph
+                        </Link>
+
+                        <Link
+                          to={`/?q=${encodeURIComponent(`What does ${std} require?`)}`}
+                          className="inline-flex items-center gap-1 text-text-muted hover:text-text font-medium"
+                          title={`Ask a grounded question about ${std}`}
+                        >
+                          <MessageSquareText className="h-3 w-3" aria-hidden="true" />
+                          Ask AI
+                        </Link>
+                      </div>
                     </div>
                   </Card>
                 ))}

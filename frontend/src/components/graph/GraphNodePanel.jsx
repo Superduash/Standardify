@@ -194,10 +194,10 @@ export function GraphNodePanel({
             })}
           >
             <Eye className="h-3.5 w-3.5" aria-hidden="true" />
-            View Standard Details
+            Standard Details
           </Link>
 
-          {!isFocused && (
+          {!isFocused ? (
             <Button
               variant="secondary"
               size="sm"
@@ -205,8 +205,20 @@ export function GraphNodePanel({
               className="justify-center text-xs"
             >
               <Target className="h-3.5 w-3.5" aria-hidden="true" />
-              Focus Graph Here
+              Focus Graph
             </Button>
+          ) : (
+            <Link
+              to={`/standards?q=${encodeURIComponent(node.id)}`}
+              className={buttonClasses({
+                variant: 'secondary',
+                size: 'sm',
+                className: 'justify-center text-xs',
+              })}
+            >
+              <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+              Search Repository
+            </Link>
           )}
         </div>
 

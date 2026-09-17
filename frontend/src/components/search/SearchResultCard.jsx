@@ -1,10 +1,11 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowUpRight, BookOpen } from 'lucide-react'
+import { ArrowUpRight, BookOpen, Check, Copy, MessageSquareText, Network } from 'lucide-react'
 import { Card } from '../ui/Card'
 import { Badge } from '../ui/Badge'
 import { StatusBadge } from '../ui/StatusBadge'
 import { cn } from '../../lib/utils'
-
+import { useToast } from '../../context/ToastContext'
 
 /**
  * @param {{
@@ -13,9 +14,25 @@ import { cn } from '../../lib/utils'
  * }} props
  */
 export function SearchResultCard({ result, className }) {
+  const [copied, setCopied] = useState(false)
+  const { showToast } = useToast()
+
   const relevancePct = typeof result.relevance_score === 'number'
     ? Math.round(result.relevance_score * 100)
     : null
+
+  const handleCopy = async (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    try {
+      await navigator.clipboard.writeText(result.standard_no)
+      setCopied(true)
+      showToast(`${result.standard_no} copied to clipboard`, 'success')
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      showToast('Could not copy to clipboard', 'error')
+    }
+  }
 
   return (
     <Card
@@ -31,6 +48,19 @@ export function SearchResultCard({ result, className }) {
             <span className="font-technical text-sm font-semibold text-primary">
               {result.standard_no}
             </span>
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="rounded p-0.5 text-text-muted hover:text-text transition-colors"
+              title={`Copy ${result.standard_no}`}
+              aria-label={`Copy ${result.standard_no}`}
+            >
+              {copied ? (
+                <Check className="h-3.5 w-3.5 text-success" aria-hidden="true" />
+              ) : (
+                <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+              )}
+            </button>
             <StatusBadge status={result.status} />
           </div>
 
@@ -68,7 +98,7 @@ export function SearchResultCard({ result, className }) {
           </Link>
         </h2>
 
-        {/* Footer: Category & Action */}
+        {/* Footer: Category & Actions */}
         <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-border/50 text-xs">
           {result.category ? (
             <Badge tone="neutral">
@@ -79,14 +109,32 @@ export function SearchResultCard({ result, className }) {
             <span />
           )}
 
-          <Link
-            to={`/standards/${encodeURIComponent(result.standard_no)}`}
-            className="font-medium text-primary hover:text-primary-dark"
-            tabIndex={-1}
-            aria-hidden="true"
-          >
-            View details →
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              to={`/graph?focus=${encodeURIComponent(result.standard_no)}`}
+              className="inline-flex items-center gap-1 font-medium text-text-muted hover:text-text"
+              title={`Explore relationship graph for ${result.standard_no}`}
+            >
+              <Network className="h-3 w-3" aria-hidden="true" />
+              Graph
+            </Link>
+
+            <Link
+              to={`/?q=${encodeURIComponent(`What does ${result.standard_no} require?`)}`}
+              className="inline-flex items-center gap-1 font-medium text-text-muted hover:text-text"
+              title={`Ask a grounded question about ${result.standard_no}`}
+            >
+              <MessageSquareText className="h-3 w-3" aria-hidden="true" />
+              Ask AI
+            </Link>
+
+            <Link
+              to={`/standards/${encodeURIComponent(result.standard_no)}`}
+              className="font-medium text-primary hover:text-primary-dark"
+            >
+              Details →
+            </Link>
+          </div>
         </div>
       </div>
     </Card>

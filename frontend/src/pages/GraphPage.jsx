@@ -2,9 +2,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, SearchX } from 'lucide-react'
 import { getFullGraph, getGraphForStandard } from '../api/endpoints'
-
 import { normalizeApiError } from '../api/client'
 import { useToast } from '../context/ToastContext'
+import { Breadcrumbs } from '../components/layout/Breadcrumbs'
 import { GraphCanvas } from '../components/graph/GraphCanvas'
 import { GraphControls } from '../components/graph/GraphControls'
 import { GraphLegend } from '../components/graph/GraphLegend'
@@ -17,11 +17,11 @@ import { EmptyState } from '../components/ui/EmptyState'
 import { ErrorState } from '../components/ui/ErrorState'
 import { Skeleton } from '../components/ui/Skeleton'
 
-
 /** Skeleton loading view for Graph page */
 function GraphPageSkeleton() {
   return (
     <div className="space-y-4" role="status" aria-label="Loading standards relationship graph">
+      <Skeleton className="h-4 w-48" />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <Skeleton className="h-8 w-64" />
         <Skeleton className="h-8 w-44" />
@@ -207,6 +207,23 @@ export function GraphPage() {
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 space-y-6">
+      {/* Breadcrumb Navigation */}
+      <Breadcrumbs
+        items={
+          focusedStandardNo
+            ? [
+                { label: 'Standards', to: '/standards' },
+                {
+                  label: focusedStandardNo,
+                  to: `/standards/${encodeURIComponent(focusedStandardNo)}`,
+                  isCode: true,
+                },
+                { label: 'Relationships', current: true },
+              ]
+            : [{ label: 'Standards', to: '/standards' }, { label: 'Relationship Graph', current: true }]
+        }
+      />
+
       {/* Page Header */}
       <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-5 text-left">
         <div className="space-y-1">
