@@ -1,41 +1,91 @@
-# Python
+# ── Python ───────────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
+*.pyw
+*.so
+
+# Virtual environments
 venv/
 env/
 .venv/
+.env/
+
+# Distribution / packaging
 *.egg-info/
+*.egg
 dist/
 build/
+sdist/
+wheels/
+pip-wheel-metadata/
+
+# Test & coverage artifacts
 .pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+nosetests.xml
+test-results/
 
-# Environment
+# Type checking / linting caches
+.mypy_cache/
+.ruff_cache/
+.pytype/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ── Environment & Secrets ─────────────────────────────────────────────────────
 .env
+.env.*
+!.env.example
 backend/.env
+backend/.env.*
+!backend/.env.example
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
 
-# Chroma vector store (large, runtime-generated)
+# ── Runtime-generated data ────────────────────────────────────────────────────
 backend/data/chroma/
 backend/data/chroma_store/
 backend/data/cache/
+*.log
+logs/
 
-# Node
+# ── Node / Frontend ──────────────────────────────────────────────────────────
 node_modules/
 frontend/node_modules/
 frontend/dist/
 frontend/.vite/
+*.local
 
-# OS
+# ── OS artifacts ─────────────────────────────────────────────────────────────
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
 Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
 
-# IDE
+# ── IDE & Editor ─────────────────────────────────────────────────────────────
 .vscode/
 .idea/
 *.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
 
-# Documentation (ignore all md except README)
+# ── Documentation (all .md except READMEs) ───────────────────────────────────
 *.md
 !README.md
 !README.MD
@@ -44,8 +94,7 @@ Thumbs.db
 !**/README.MD
 !**/readme.md
 
-# Export artifacts & scripts
+# ── Export artifacts & dev scripts ───────────────────────────────────────────
 export.py
 frontend.txt
 backend.txt
-
