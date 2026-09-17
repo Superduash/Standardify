@@ -10,20 +10,8 @@ import { PlaceholderPage } from './pages/PlaceholderPage'
 // real page in its own phase (§8).
 const StandardsSearchPage = lazy(() => import('./pages/StandardsSearchPage'))
 const StandardDetailPage = lazy(() => import('./pages/StandardDetailPage'))
+const GapCheckerPage = lazy(() => import('./pages/GapCheckerPage'))
 
-
-
-const GapCheckPlaceholder = lazy(() =>
-  Promise.resolve({
-    default: () => (
-      <PlaceholderPage
-        title="Compliance Gap Checker"
-        description="Paste a product description and see which requirements are matched — and which are missing."
-        phase="Coming in Frontend Phase 3"
-      />
-    ),
-  })
-)
 
 const GraphPlaceholder = lazy(() =>
   Promise.resolve({
@@ -65,7 +53,8 @@ export function AppRouter() {
           <Route path="/" element={<HomePage />} />
           <Route path="/standards" element={<StandardsSearchPage />} />
           <Route path="/standards/:standardNo" element={<StandardDetailPage />} />
-          <Route path="/gap-check" element={<GapCheckPlaceholder />} />
+          <Route path="/gap-check" element={<GapCheckerPage />} />
+
 
           <Route path="/graph" element={<GraphPlaceholder />} />
           <Route path="*" element={<NotFoundPlaceholder />} />
