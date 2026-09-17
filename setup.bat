@@ -2,11 +2,11 @@
 setlocal
 
 echo ================================================
-echo  Standardify — Setup
+echo  Standardify -- Setup
 echo ================================================
 echo.
 
-:: ── 1. Backend Python venv ──────────────────────
+:: -- 1. Backend Python venv ----------------------
 echo [1/4] Creating Python virtual environment...
 cd /d "%~dp0backend"
 
@@ -23,10 +23,10 @@ if not exist venv (
         exit /b 1
     )
 ) else (
-    echo       venv already exists — skipping.
+    echo       venv already exists -- skipping.
 )
 
-:: ── 2. Install Python deps ──────────────────────
+:: -- 2. Install Python deps ----------------------
 echo.
 echo [2/4] Installing Python dependencies (this may take a few minutes)...
 call venv\Scripts\activate.bat
@@ -39,7 +39,7 @@ if errorlevel 1 (
 )
 echo       Python dependencies installed.
 
-:: ── 3. Ingest seed standards ─────────────────────
+:: -- 3. Ingest seed standards ---------------------
 echo.
 echo [3/4] Ingesting seed standards into ChromaDB...
 echo       NOTE: First run downloads the BGE-M3 embedding model (~1.1 GB).
@@ -52,7 +52,7 @@ if errorlevel 1 (
 )
 echo       Ingestion complete.
 
-:: ── 4. Frontend npm install ──────────────────────
+:: -- 4. Frontend npm install ----------------------
 echo.
 echo [4/4] Installing frontend dependencies...
 cd /d "%~dp0frontend"
