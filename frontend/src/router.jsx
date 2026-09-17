@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import { AppShell } from './components/layout/AppShell'
 import { HomePage } from './pages/HomePage'
 import { PlaceholderPage } from './pages/PlaceholderPage'
+import { QuotaDebugPanel } from './components/dev/QuotaDebugPanel'
 
 // Non-Home routes are lazy-loaded so the initial bundle only pays for what
 // the Home page needs (frontendplan.md §7). They currently resolve to the
@@ -28,8 +29,17 @@ const NotFoundPlaceholder = lazy(() =>
 
 function RouteFallback() {
   return (
-    <div className="flex min-h-[40vh] items-center justify-center" role="status" aria-label="Loading page">
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-border border-t-primary" />
+    <div
+      className="mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:py-24 text-center space-y-4"
+      role="status"
+      aria-label="Loading page content"
+    >
+      <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] bg-primary-light text-primary">
+        <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary/30 border-t-primary" />
+      </div>
+      <p className="font-technical text-xs font-semibold uppercase tracking-wider text-text-muted">
+        Loading Standardify Module...
+      </p>
     </div>
   )
 }
@@ -45,10 +55,11 @@ export function AppRouter() {
           <Route path="/gap-check" element={<GapCheckerPage />} />
           <Route path="/graph" element={<GraphPage />} />
           <Route path="*" element={<NotFoundPlaceholder />} />
-
-
         </Routes>
       </Suspense>
+
+      {/* Phase 10 debug panel — self-gates on VITE_SHOW_DEBUG_PANEL, invisible in production */}
+      <QuotaDebugPanel />
     </AppShell>
   )
 }

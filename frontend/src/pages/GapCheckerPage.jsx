@@ -9,10 +9,10 @@ import {
   SearchX,
 } from 'lucide-react'
 
-
 import { checkGap } from '../api/endpoints'
 import { normalizeApiError } from '../api/client'
 import { useToast } from '../context/ToastContext'
+import { useRateLimitCooldown } from '../hooks/useRateLimitCooldown'
 import { ProductDescriptionForm } from '../components/gap-checker/ProductDescriptionForm'
 import { RequirementItem } from '../components/gap-checker/RequirementItem'
 import { GapSummaryCard } from '../components/gap-checker/GapSummaryCard'
@@ -99,10 +99,16 @@ export function GapCheckerPage() {
   const [hasSubmitted, setHasSubmitted] = useState(Boolean(saved?.response))
 
   const { showToast } = useToast()
+  const { isCoolingDown, cooldownRemaining, triggerCooldown } = useRateLimitCooldown(10)
 
   const handleAnalyze = async (descriptionToAnalyze) => {
     const trimmed = (descriptionToAnalyze || productDescription).trim()
-    if (!trimmed || loading) return
+    if (!trimmed || loading || isCoolingDown) return
+
+    if (trimmed.length < 10) {
+      showToast('Please provide at least 10 characters describing the product specifications.', 'error')
+      return
+    }
 
     setLoading(true)
     setError(null)
@@ -118,7 +124,8 @@ export function GapCheckerPage() {
       setError(normalized)
 
       if (normalized.kind === 'rate_limited') {
-        showToast("Rate limit reached. Please wait a moment before re-submitting.", 'error')
+        triggerCooldown(10)
+        showToast("Rate limit reached. Please wait for the cooldown before re-submitting.", 'error')
       } else if (normalized.kind === 'unavailable') {
         showToast("Compliance assistant is temporarily unavailable.", 'error')
       } else {
@@ -143,7 +150,7 @@ export function GapCheckerPage() {
   const missingRequirements = response?.missing_requirements || []
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10 space-y-8">
+    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10 space-y-8">
       {/* Header */}
       <header className="text-center sm:text-left space-y-2">
         <span className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3 py-1 text-xs font-medium text-primary">
@@ -190,6 +197,8 @@ export function GapCheckerPage() {
           onChange={setProductDescription}
           onSubmit={handleAnalyze}
           loading={loading}
+          isCoolingDown={isCoolingDown}
+          cooldownRemaining={cooldownRemaining}
         />
       </section>
 
@@ -370,7 +379,7 @@ export function GapCheckerPage() {
           </div>
         )}
       </section>
-    </main>
+    </div>
   )
 }
 

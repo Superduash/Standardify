@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
+import { AlertCircle, ArrowRight } from 'lucide-react'
 import { askQuestion } from '../../api/endpoints'
 import { normalizeApiError } from '../../api/client'
 import { useToast } from '../../context/ToastContext'
+import { useRateLimitCooldown } from '../../hooks/useRateLimitCooldown'
 import { Input } from '../ui/Input'
 import { Button } from '../ui/Button'
 import { ErrorState } from '../ui/ErrorState'
@@ -18,7 +19,7 @@ import {
 
 /**
  * Maps normalized API error kind to distinct user-facing guidance.
- * Per Phase 3 requirement §9.
+ * Per Phase 3 requirement §9 & Phase 8 §7.
  */
 function getErrorExplanation(normalized) {
   if (!normalized) return 'Something went wrong. Please try again.'
@@ -31,7 +32,7 @@ function getErrorExplanation(normalized) {
     case 'validation':
       return normalized.detail || 'Please check your question and try again.'
     case 'rate_limited':
-      return 'The assistant is temporarily rate-limited. Standardify enforces a rate limit of 60 requests per minute per client. Please wait a moment and try again.'
+      return 'Too many requests. Standardify allows up to 60 requests per minute. Please wait for the cooldown before asking again.'
     case 'unavailable':
       return 'The assistant is temporarily unavailable. Please try again shortly.'
     default:
@@ -41,7 +42,7 @@ function getErrorExplanation(normalized) {
 
 /**
  * Standardify Primary AI Grounded Q&A Workspace.
- * Elevated in Phase 3 with session history, interactive citations, and multi-standard presentation.
+ * Hardened in Phase 8 with 429 cooldown timer, race condition protection, and clean error states.
  */
 export function AskExperience() {
   const [searchParams] = useSearchParams()
@@ -56,8 +57,9 @@ export function AskExperience() {
 
   const inputRef = useRef(null)
   const hasAutoRunRef = useRef(false)
+  const isRequestInFlightRef = useRef(false)
   const { showToast } = useToast()
-
+  const { isCoolingDown, cooldownRemaining, triggerCooldown } = useRateLimitCooldown(10)
 
   // Global "/" keyboard shortcut focuses the Ask input
   useEffect(() => {
@@ -79,8 +81,9 @@ export function AskExperience() {
   const runAsk = useCallback(
     async (questionText) => {
       const trimmed = questionText.trim()
-      if (!trimmed || loading) return
+      if (!trimmed || isRequestInFlightRef.current || isCoolingDown) return
 
+      isRequestInFlightRef.current = true
       setLoading(true)
       setBlockingError(null)
       setErrorRequestId(undefined)
@@ -97,6 +100,10 @@ export function AskExperience() {
         const normalized = normalizeApiError(err)
         setErrorRequestId(normalized.requestId)
 
+        if (normalized.kind === 'rate_limited') {
+          triggerCooldown(10)
+        }
+
         const explanation = getErrorExplanation(normalized)
 
         if (normalized.kind === 'validation' || normalized.kind === 'rate_limited' || normalized.kind === 'unavailable') {
@@ -106,10 +113,11 @@ export function AskExperience() {
           setBlockingError(explanation)
         }
       } finally {
+        isRequestInFlightRef.current = false
         setLoading(false)
       }
     },
-    [loading, showToast]
+    [isCoolingDown, triggerCooldown, showToast]
   )
 
   // Auto-run if query param is present on mount (Bridge from Standard Detail)
@@ -149,6 +157,21 @@ export function AskExperience() {
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-6">
+      {/* Rate limit cooldown notice */}
+      {isCoolingDown && (
+        <div
+          className="flex items-center gap-2 rounded-[var(--radius-md)] border border-amber-300 bg-amber-50 p-3 text-xs text-warning"
+          role="status"
+          aria-live="polite"
+        >
+          <AlertCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
+          <span>
+            Rate limit active. Please wait{' '}
+            <strong className="font-technical font-bold">{cooldownRemaining}s</strong> before submitting another question.
+          </span>
+        </div>
+      )}
+
       {/* Ask Input Form */}
       <form
         onSubmit={handleSubmit}
@@ -164,11 +187,12 @@ export function AskExperience() {
             ref={inputRef}
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
+            disabled={loading || isCoolingDown}
             placeholder="e.g. Which standard applies to ceiling fans?"
             className="h-14 pr-12 text-base shadow-xs"
             autoComplete="off"
           />
-          {!question && (
+          {!question && !isCoolingDown && (
             <kbd
               className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 rounded border border-border bg-bg px-1.5 py-0.5 font-technical text-[11px] text-text-muted"
               aria-hidden="true"
@@ -181,13 +205,13 @@ export function AskExperience() {
           type="submit"
           size="lg"
           loading={loading}
-          disabled={!question.trim()}
+          disabled={!question.trim() || isCoolingDown}
           className="h-14 shrink-0 px-6 font-semibold"
         >
           {!loading && (
             <>
-              Ask
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              {isCoolingDown ? `Wait (${cooldownRemaining}s)` : 'Ask'}
+              {!isCoolingDown && <ArrowRight className="h-4 w-4" aria-hidden="true" />}
             </>
           )}
         </Button>

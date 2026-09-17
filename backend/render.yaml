@@ -21,6 +21,9 @@ services:
         value: "86400"
       - key: LOG_LEVEL
         value: INFO
+      # CORS: ["*"] is acceptable for SIH demo use. For production hardening,
+      # restrict to the real Vercel frontend origin, e.g.:
+      # '["https://standardify.vercel.app"]'
       - key: CORS_ORIGINS
         value: '["*"]'
       - key: RATE_LIMIT_REQUESTS

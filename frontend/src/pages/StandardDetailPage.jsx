@@ -132,16 +132,16 @@ export function StandardDetailPage() {
   // 1. Loading state
   if (loading) {
     return (
-      <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10">
+      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10">
         <StandardDetailSkeleton />
-      </main>
+      </div>
     )
   }
 
   // 2. 404 / Dedicated Not Found state
   if (isNotFound) {
     return (
-      <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16 text-center">
+      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16 text-center">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 border border-amber-200 text-warning">
           <FileX2 className="h-7 w-7" aria-hidden="true" />
         </div>
@@ -168,26 +168,26 @@ export function StandardDetailPage() {
             Go back
           </Button>
         </div>
-      </main>
+      </div>
     )
   }
 
   // 3. Blocking Server/Network Error state
   if (statusError && !statusData) {
     return (
-      <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
+      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
         <ErrorState
           message={statusError.message || 'Failed to load standard information.'}
           requestId={statusError.requestId}
           onRetry={loadData}
         />
-      </main>
+      </div>
     )
   }
 
   // 4. Success State
   return (
-    <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10 space-y-6">
+    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10 space-y-6">
       {/* Breadcrumb Navigation */}
       <Breadcrumbs
         items={[
@@ -308,7 +308,7 @@ export function StandardDetailPage() {
       <section aria-label="Ask about this standard">
         <AskAboutStandardCTA standardNo={standardNo} />
       </section>
-    </main>
+    </div>
   )
 }
 

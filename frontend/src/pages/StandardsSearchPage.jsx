@@ -174,7 +174,7 @@ export function StandardsSearchPage() {
   }, [rawResults, selectedCategory, selectedStatus, sortBy])
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10">
+    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10">
       {/* Page Header */}
       <header className="mb-6 text-center sm:text-left">
         <span className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3 py-1 text-xs font-medium text-primary">
@@ -223,8 +223,7 @@ export function StandardsSearchPage() {
           handleSubmit(term)
         }}
       />
-
-    </main>
+    </div>
   )
 }
 

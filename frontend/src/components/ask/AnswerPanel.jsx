@@ -171,8 +171,16 @@ export function AnswerPanel({ loading, response }) {
         </div>
 
         {/* Grounded Plain-Language Answer Body */}
-        <div className="prose prose-sm max-w-none text-text">
-          <p className="text-base leading-relaxed text-text">{response.answer}</p>
+        <div className="space-y-3 text-base leading-relaxed text-text">
+          {typeof response.answer === 'string' ? (
+            response.answer.split(/\n\n+/).map((paragraph, pIdx) => (
+              <p key={pIdx} className="leading-relaxed">
+                {paragraph}
+              </p>
+            ))
+          ) : (
+            <p className="leading-relaxed">{String(response.answer || '')}</p>
+          )}
         </div>
 
         {/* Advisory Warnings (e.g. superseded status, low confidence) */}

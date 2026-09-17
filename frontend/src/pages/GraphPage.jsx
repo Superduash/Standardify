@@ -206,7 +206,7 @@ export function GraphPage() {
   }, [nodes])
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 space-y-6">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 space-y-6">
       {/* Breadcrumb Navigation */}
       <Breadcrumbs
         items={
@@ -349,13 +349,13 @@ export function GraphPage() {
             />
 
             {/* Floating Legend (Bottom Left) */}
-            <div className="absolute bottom-3 left-3 z-30 max-w-[260px]">
+            <div className="absolute bottom-3 left-3 z-20 max-w-[200px] sm:max-w-[260px]">
               <GraphLegend />
             </div>
 
-            {/* Floating Selected Node Detail Panel (Top/Bottom Right) */}
+            {/* Floating Selected Node Detail Panel (Mobile bottom drawer / Desktop top-right panel) */}
             {selectedNode && (
-              <div className="absolute top-3 right-3 z-30 w-80 sm:w-96 max-w-[calc(100%-24px)]">
+              <div className="fixed inset-x-3 bottom-3 sm:absolute sm:inset-x-auto sm:top-3 sm:right-3 sm:bottom-auto z-30 w-auto sm:w-96 max-h-[80vh] overflow-y-auto shadow-2xl">
                 <GraphNodePanel
                   node={selectedNode}
                   focusedStandardNo={focusedStandardNo}
@@ -382,7 +382,7 @@ export function GraphPage() {
           />
         )}
       </div>
-    </main>
+    </div>
   )
 }
 

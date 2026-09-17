@@ -9,7 +9,9 @@ export default defineConfig({
     port: 5173,
   },
   build: {
-    // keep an eye on bundle size as pages are added in later phases
+    // Keep an eye on bundle size as pages are added in later phases.
     chunkSizeWarningLimit: 600,
+    // Never ship source maps to production — keeps source internals private.
+    sourcemap: false,
   },
 })
