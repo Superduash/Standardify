@@ -1,3 +1,121 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Self-hosted IBM Plex fonts (no external runtime request).
+   Latin + Latin-Extended only — covers English and accented Western
+   European characters. Cyrillic/Greek/Vietnamese subsets are dropped
+   deliberately to keep the font payload lean (see frontendplan.md §7). */
+@import "@fontsource/ibm-plex-sans/latin-400.css";
+@import "@fontsource/ibm-plex-sans/latin-500.css";
+@import "@fontsource/ibm-plex-sans/latin-600.css";
+@import "@fontsource/ibm-plex-sans/latin-700.css";
+@import "@fontsource/ibm-plex-sans/latin-ext-400.css";
+@import "@fontsource/ibm-plex-sans/latin-ext-500.css";
+@import "@fontsource/ibm-plex-sans/latin-ext-600.css";
+@import "@fontsource/ibm-plex-mono/latin-400.css";
+@import "@fontsource/ibm-plex-mono/latin-500.css";
+@import "@fontsource/ibm-plex-mono/latin-ext-400.css";
+
+/*
+  Design tokens — Tailwind v4 CSS-first config.
+  Values copied verbatim from the Standardify design brief. Do not add colors
+  outside this palette without updating the brief first.
+*/
+@theme {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  --color-primary: #264796;
+  --color-primary-dark: #1D3575;
+  --color-primary-light: #EAF0FF;
+  --color-teal: #147D76;
+  --color-teal-light: #E8F5F3;
+
+  --color-text: #172033;
+  --color-text-body: #3F4A5A;
+  --color-text-muted: #667085;
+
+  --color-bg: #F7F8FA;
+  --color-surface: #FFFFFF;
+  --color-border: #D9DEE7;
+
+  --color-success: #177245;
+  --color-warning: #A15C00;
+  --color-danger: #C62828;
+  --color-bis-red: #E31E24;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+
+  --shadow-card: 0 1px 2px rgba(23, 32, 51, 0.04), 0 1px 1px rgba(23, 32, 51, 0.03);
+  --shadow-card-hover: 0 2px 8px rgba(23, 32, 51, 0.07);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg);
+    color: var(--color-text-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-sans);
+    color: var(--color-text);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  /* Visible, deliberate focus states everywhere — never suppressed */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  ::selection {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary-dark);
+  }
+}
+
+@layer utilities {
+  /* Technical/source metadata — standard numbers, clause numbers, page refs, status IDs */
+  .font-technical {
+    font-family: var(--font-mono);
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* One small, purposeful entrance animation for toasts — no animation library. */
+  .toast-enter {
+    animation: toast-in 180ms ease-out;
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
