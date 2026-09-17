@@ -60,19 +60,22 @@ export function getFullGraph({ limit = 100, offset = 0 } = {}) {
 
 /**
  * @param {string} query
+ * @param {import('axios').AxiosRequestConfig} [options]
  * @returns {Promise<import('./types').SearchResponse>}
  */
-export function searchStandards(query) {
-  return apiClient.get('/standards/search', { params: { q: query } }).then((r) => r.data)
+export function searchStandards(query, options = {}) {
+  return apiClient.get('/standards/search', { params: { q: query }, ...options }).then((r) => r.data)
 }
 
 /**
  * @param {string} query
+ * @param {import('axios').AxiosRequestConfig} [options]
  * @returns {Promise<import('./types').SuggestResponse>}
  */
-export function suggestStandards(query) {
-  return apiClient.get('/standards/suggest', { params: { q: query } }).then((r) => r.data)
+export function suggestStandards(query, options = {}) {
+  return apiClient.get('/standards/suggest', { params: { q: query }, ...options }).then((r) => r.data)
 }
+
 
 /**
  * @param {string} standardNo
