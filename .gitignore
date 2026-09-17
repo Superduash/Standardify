@@ -34,3 +34,18 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+
+# Documentation (ignore all md except README)
+*.md
+!README.md
+!README.MD
+!readme.md
+!**/README.md
+!**/README.MD
+!**/readme.md
+
+# Export artifacts & scripts
+export.py
+frontend.txt
+backend.txt
+
