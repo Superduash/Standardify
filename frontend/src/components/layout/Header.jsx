@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { FileSearch, Menu, MessageSquareText, ShieldCheck } from 'lucide-react'
+import { FileSearch, Menu, MessageSquareText, Network, ShieldCheck } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { MobileNav } from './MobileNav'
 
@@ -8,7 +8,9 @@ const NAV_ITEMS = [
   { to: '/', label: 'Ask', icon: MessageSquareText, end: true },
   { to: '/standards', label: 'Standards', icon: FileSearch },
   { to: '/gap-check', label: 'Gap Check', icon: ShieldCheck },
+  { to: '/graph', label: 'Graph', icon: Network },
 ]
+
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)

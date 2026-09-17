@@ -42,21 +42,24 @@ export function checkGap(productDescription) {
  * N-hop relationship subgraph centered on one standard.
  * @param {string} standardNo
  * @param {number} [depth=1]  1-3 per FRONTEND_CONTRACT.md §3.3
+ * @param {import('axios').AxiosRequestConfig} [options]
  * @returns {Promise<import('./types').GraphResponse>}
  */
-export function getGraphForStandard(standardNo, depth = 1) {
+export function getGraphForStandard(standardNo, depth = 1, options = {}) {
   return apiClient
-    .get(`/graph/${encodeURIComponent(standardNo)}`, { params: { depth } })
+    .get(`/graph/${encodeURIComponent(standardNo)}`, { params: { depth }, ...options })
     .then((r) => r.data)
 }
 
 /**
  * @param {{ limit?: number, offset?: number }} [pagination]
+ * @param {import('axios').AxiosRequestConfig} [options]
  * @returns {Promise<import('./types').GraphResponse>}
  */
-export function getFullGraph({ limit = 100, offset = 0 } = {}) {
-  return apiClient.get('/graph/full', { params: { limit, offset } }).then((r) => r.data)
+export function getFullGraph({ limit = 100, offset = 0 } = {}, options = {}) {
+  return apiClient.get('/graph/full', { params: { limit, offset }, ...options }).then((r) => r.data)
 }
+
 
 /**
  * @param {string} query

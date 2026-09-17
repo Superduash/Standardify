@@ -11,19 +11,8 @@ import { PlaceholderPage } from './pages/PlaceholderPage'
 const StandardsSearchPage = lazy(() => import('./pages/StandardsSearchPage'))
 const StandardDetailPage = lazy(() => import('./pages/StandardDetailPage'))
 const GapCheckerPage = lazy(() => import('./pages/GapCheckerPage'))
+const GraphPage = lazy(() => import('./pages/GraphPage'))
 
-
-const GraphPlaceholder = lazy(() =>
-  Promise.resolve({
-    default: () => (
-      <PlaceholderPage
-        title="Standards Relationship Graph"
-        description="Explore which standards a given one supersedes, references, or shares a category with."
-        phase="Coming in Frontend Phase 4"
-      />
-    ),
-  })
-)
 
 const NotFoundPlaceholder = lazy(() =>
   Promise.resolve({
@@ -54,10 +43,9 @@ export function AppRouter() {
           <Route path="/standards" element={<StandardsSearchPage />} />
           <Route path="/standards/:standardNo" element={<StandardDetailPage />} />
           <Route path="/gap-check" element={<GapCheckerPage />} />
-
-
-          <Route path="/graph" element={<GraphPlaceholder />} />
+          <Route path="/graph" element={<GraphPage />} />
           <Route path="*" element={<NotFoundPlaceholder />} />
+
 
         </Routes>
       </Suspense>
