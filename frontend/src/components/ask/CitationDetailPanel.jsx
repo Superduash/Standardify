@@ -94,7 +94,7 @@ export function CitationDetailPanel({ citation, isOpen, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="citation-modal-title"
-        className="relative w-full max-w-lg rounded-[var(--radius-lg)] border border-border bg-surface p-6 shadow-2xl space-y-5 text-left"
+        className="relative w-full max-w-lg rounded-[var(--radius-lg)] border border-border bg-surface p-6 shadow-2xl space-y-5 text-left animate-panel-in"
       >
         {/* Header */}
         <div className="flex items-start justify-between gap-4 border-b border-border pb-4">

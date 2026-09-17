@@ -173,7 +173,7 @@ async def ask_endpoint(request: AskRequest) -> AskResponse:
         logger.error("LLM generation failed: %s", exc)
         raise HTTPException(
             status_code=503,
-            detail="AI inference providers (Groq and Gemini) are currently unavailable.",
+            detail=f"The AI assistant is temporarily unavailable. {exc}",
         ) from exc
 
     # 6. Store in Cache for Subsequent Runs

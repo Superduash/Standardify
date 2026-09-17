@@ -96,7 +96,41 @@
 
   /* One small, purposeful entrance animation for toasts — no animation library. */
   .toast-enter {
-    animation: toast-in 180ms ease-out;
+    animation: toast-in 180ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Subtle, fast, calm entrance utility classes (GPU-accelerated transform & opacity) */
+  .animate-fade-in {
+    animation: fadeIn 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUpFade 250ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-panel-in {
+    animation: panelSlideIn 180ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Hero staggered choreography (very subtle, fast, restrained) */
+  .animate-hero-badge {
+    animation: fadeIn 220ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-hero-title {
+    animation: slideUpFade 320ms cubic-bezier(0.16, 1, 0.3, 1) 40ms both;
+  }
+
+  .animate-hero-sub {
+    animation: slideUpFade 320ms cubic-bezier(0.16, 1, 0.3, 1) 90ms both;
+  }
+
+  .animate-hero-ask {
+    animation: slideUpFade 360ms cubic-bezier(0.16, 1, 0.3, 1) 140ms both;
+  }
+
+  .animate-hero-prompts {
+    animation: slideUpFade 360ms cubic-bezier(0.16, 1, 0.3, 1) 190ms both;
   }
 }
 
@@ -108,6 +142,37 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes panelSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 

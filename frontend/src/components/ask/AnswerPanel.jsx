@@ -93,7 +93,7 @@ export function AnswerPanel({ loading, response }) {
   // 1. Dedicated No-Evidence State (Requirement §10)
   if (!response.evidence_found) {
     return (
-      <Card className="text-left space-y-4">
+      <Card className="animate-slide-up text-left space-y-4">
         <EmptyState
           icon={SearchX}
           title="No reliable evidence found in indexed standards"
@@ -140,7 +140,7 @@ export function AnswerPanel({ loading, response }) {
 
   return (
     <>
-      <Card className="text-left space-y-4">
+      <Card className="animate-slide-up text-left space-y-4">
         {/* Telemetry Header */}
         <div className="flex flex-wrap items-center gap-2 border-b border-border/60 pb-3">
           <div className="flex items-center gap-1">

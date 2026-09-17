@@ -1,63 +1,76 @@
 import { Link } from 'react-router-dom'
-import { ArrowUpRight, FileSearch, MessageSquareText, ShieldCheck, Waypoints } from 'lucide-react'
-import { Card, CardDescription, CardTitle } from '../ui/Card'
+import { ArrowRight, ArrowUpRight, FileSearch, MessageSquareText, ShieldCheck, Waypoints } from 'lucide-react'
 
 const FEATURES = [
   {
     icon: MessageSquareText,
     title: 'Ask Grounded Q&A',
-    description: 'Plain-language engineering questions answered strictly from indexed Indian Standards with clause citations.',
+    description: 'Pose natural-language engineering questions and get answers cited with exact BIS clause IDs.',
+    actionText: 'Ask a question',
     to: '/',
   },
   {
     icon: FileSearch,
     title: 'Standards Registry',
-    description: 'Search and filter active, superseded, and withdrawn standards by domain, number, or product title.',
+    description: 'Filter and inspect active, superseded, or withdrawn standards by domain, standard number, or title.',
+    actionText: 'Browse registry',
     to: '/standards',
   },
   {
     icon: ShieldCheck,
     title: 'Compliance Gap Checker',
-    description: 'Evaluate product specifications against mandatory BIS requirements to detect satisfied and missing clauses.',
+    description: 'Evaluate technical product specifications against mandatory requirements to flag missing parameters.',
+    actionText: 'Run gap analysis',
     to: '/gap-check',
   },
   {
     icon: Waypoints,
     title: 'Relationship Graph',
-    description: 'Explore multi-hop supersession trees, norm references, and domain connections across Indian Standards.',
+    description: 'Trace supersession lineages, normative references, and cross-standard dependencies visually.',
+    actionText: 'Explore topology',
     to: '/graph',
   },
 ]
 
 export function FeatureHighlights() {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-      <div className="mx-auto mb-8 max-w-xl text-center">
-        <h2 className="text-xl font-semibold text-text sm:text-2xl">
+    <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+      <div className="mx-auto mb-10 max-w-xl text-center">
+        <h2 className="text-xl font-semibold tracking-tight text-text sm:text-2xl">
           One workspace, four ways in
         </h2>
-        <p className="mt-2 text-sm text-text-muted sm:text-base">
-          Whichever way you approach a standard, every answer is grounded in the same indexed
-          source text.
+        <p className="mt-2 text-sm leading-relaxed text-text-muted sm:text-base">
+          Whether starting from an engineering question, a standard number, product specs, or dependency exploration.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {FEATURES.map(({ icon: Icon, title, description, to }) => (
-          <Link key={title} to={to} className="group block">
-            <Card className="h-full transition-shadow duration-150 group-hover:shadow-[var(--shadow-card-hover)]">
-              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] bg-primary-light text-primary">
-                <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {FEATURES.map(({ icon: Icon, title, description, actionText, to }) => (
+          <Link
+            key={title}
+            to={to}
+            className="group flex flex-col justify-between rounded-[var(--radius-lg)] border border-border/80 bg-surface p-5 shadow-2xs transition-all duration-150 ease-out hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-card-hover active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+          >
+            <div>
+              <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] bg-primary-light text-primary transition-transform duration-150 group-hover:scale-105">
+                <Icon className="h-5 w-5" aria-hidden="true" />
               </div>
-              <CardTitle className="flex items-center gap-1">
-                {title}
+              <h3 className="flex items-center justify-between text-sm font-semibold text-text group-hover:text-primary transition-colors">
+                <span>{title}</span>
                 <ArrowUpRight
-                  className="h-3.5 w-3.5 text-text-muted opacity-0 transition-opacity group-hover:opacity-100"
+                  className="h-4 w-4 text-text-muted opacity-60 transition-all duration-150 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-primary"
                   aria-hidden="true"
                 />
-              </CardTitle>
-              <CardDescription>{description}</CardDescription>
-            </Card>
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-text-body/85">{description}</p>
+            </div>
+
+            <div className="mt-5 border-t border-border/50 pt-3">
+              <span className="inline-flex items-center gap-1 font-technical text-xs font-medium text-primary">
+                <span>{actionText}</span>
+                <ArrowRight className="h-3 w-3 transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true" />
+              </span>
+            </div>
           </Link>
         ))}
       </div>

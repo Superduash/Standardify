@@ -39,9 +39,20 @@ RATE_LIMITED_PATHS = {"/api/v1/ask", "/api/v1/gap-check"}
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """
     Manage application lifecycle (startup and shutdown events).
+    Pre-warms the embedding engine so the first request is instant.
     """
     setup_logging(log_level=settings.log_level)
-    logger.info("Standardify API initialized successfully. Environment ready.")
+    logger.info("Standardify API initialized successfully.")
+
+    # Eagerly pre-warm embedding model in background so first query does not stall
+    try:
+        from app.core.embeddings import get_embedding_engine
+        logger.info("Pre-warming BGE-M3 embedding engine...")
+        get_embedding_engine()
+        logger.info("BGE-M3 embedding engine initialized and ready.")
+    except Exception as exc:
+        logger.warning("Embedding engine pre-warm warning (will load on first request): %s", exc)
+
     yield
     logger.info("Standardify API shutting down.")
 
@@ -114,12 +125,13 @@ def create_app() -> FastAPI:
     @app.exception_handler(LLMUnavailableError)
     async def llm_unavailable_exception_handler(request: Request, exc: LLMUnavailableError):
         req_id = getattr(request.state, "request_id", str(uuid.uuid4()))
-        logger.error("LLM Provider Unavailable on %s (ReqID: %s): %s", request.url.path, req_id, exc)
+        err_msg = str(exc) or "The AI inference service is temporarily unavailable. Please try again shortly."
+        logger.error("LLM Provider Unavailable on %s (ReqID: %s): %s", request.url.path, req_id, err_msg)
         return JSONResponse(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             content={
                 "error": "llm_unavailable",
-                "detail": "The AI inference service is temporarily unavailable. Please try again shortly.",
+                "detail": err_msg,
                 "request_id": req_id,
             },
             headers={"X-Request-ID": req_id},

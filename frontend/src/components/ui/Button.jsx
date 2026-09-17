@@ -26,7 +26,7 @@ const SIZES = {
  */
 export function buttonClasses({ variant = 'primary', size = 'md', className } = {}) {
   return cn(
-    'inline-flex items-center justify-center rounded-[var(--radius-md)] font-medium transition-colors duration-150 disabled:cursor-not-allowed',
+    'inline-flex items-center justify-center rounded-[var(--radius-md)] font-medium transition-all duration-150 ease-out active:scale-[0.985] disabled:cursor-not-allowed disabled:active:scale-100',
     VARIANTS[variant],
     SIZES[size],
     className

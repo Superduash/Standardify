@@ -19,24 +19,28 @@ import {
 
 /**
  * Maps normalized API error kind to distinct user-facing guidance.
- * Per Phase 3 requirement §9 & Phase 8 §7.
+ * Prioritizes actionable backend detail (e.g. missing API keys or initialization status).
  */
 function getErrorExplanation(normalized) {
   if (!normalized) return 'Something went wrong. Please try again.'
 
+  if (normalized.detail && typeof normalized.detail === 'string') {
+    return normalized.detail
+  }
+
   switch (normalized.kind) {
     case 'network':
-      return "We couldn't reach the assistant. Check your connection and try again."
+      return "Could not connect to the Standardify backend. Please ensure the backend server is running on http://127.0.0.1:8000."
     case 'timeout':
-      return 'The request took too long to process. Please try again.'
+      return 'The request timed out. On the very first run, the local BGE-M3 model downloads/initializes in memory (~1.1 GB). Please try again once initialized.'
     case 'validation':
-      return normalized.detail || 'Please check your question and try again.'
+      return normalized.detail || 'Please check your question syntax and try again.'
     case 'rate_limited':
-      return 'Too many requests. Standardify allows up to 60 requests per minute. Please wait for the cooldown before asking again.'
+      return 'Rate limit reached (60 req/min). Please wait for the cooldown before asking again.'
     case 'unavailable':
-      return 'The assistant is temporarily unavailable. Please try again shortly.'
+      return normalized.detail || normalized.message || 'AI inference is currently unavailable. Standards Search, Registry, Gap Checker, and Graph remain available offline.'
     default:
-      return normalized.message || 'Something went wrong on our end. Please try again.'
+      return normalized.detail || normalized.message || 'Something went wrong on our end. Please try again.'
   }
 }
 
@@ -175,7 +179,7 @@ export function AskExperience() {
       {/* Ask Input Form */}
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-3 sm:flex-row"
+        className="flex flex-col gap-2.5 sm:flex-row sm:gap-3"
         aria-label="Ask Standardify a grounded question"
       >
         <label htmlFor="ask-input" className="sr-only">
@@ -189,12 +193,12 @@ export function AskExperience() {
             onChange={(e) => setQuestion(e.target.value)}
             disabled={loading || isCoolingDown}
             placeholder="e.g. Which standard applies to ceiling fans?"
-            className="h-14 pr-12 text-base shadow-xs"
+            className="h-13 sm:h-14 pr-12 text-base shadow-2xs border-border/85 bg-surface text-text placeholder:text-text-muted/75 transition-all duration-150 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20"
             autoComplete="off"
           />
           {!question && !isCoolingDown && (
             <kbd
-              className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 rounded border border-border bg-bg px-1.5 py-0.5 font-technical text-[11px] text-text-muted"
+              className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 rounded border border-border/80 bg-bg px-2 py-0.5 font-technical text-[11px] font-semibold text-text-muted"
               aria-hidden="true"
             >
               /
@@ -206,7 +210,7 @@ export function AskExperience() {
           size="lg"
           loading={loading}
           disabled={!question.trim() || isCoolingDown}
-          className="h-14 shrink-0 px-6 font-semibold"
+          className="h-13 sm:h-14 shrink-0 px-7 font-semibold shadow-2xs transition-all duration-150"
         >
           {!loading && (
             <>

@@ -11,7 +11,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
-  timeout: 20000, // /ask can take a few seconds on a cache miss (LLM round-trip)
+  timeout: 35000, // 35s to allow for local cold-start embedding initialization
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -35,13 +35,17 @@ export const apiClient = axios.create({
 export function normalizeApiError(error) {
   if (axios.isAxiosError(error)) {
     if (error.code === 'ECONNABORTED') {
-      return { status: null, kind: 'timeout', message: 'That took too long to answer. Please try again.' }
+      return {
+        status: null,
+        kind: 'timeout',
+        message: 'The request took too long to complete. The local embedding engine may still be initializing. Please try again.',
+      }
     }
     if (!error.response) {
       return {
         status: null,
         kind: 'network',
-        message: "Couldn't reach Standardify. Check your connection or try again shortly.",
+        message: "Could not reach Standardify backend at " + BASE_URL + ". Check that the server is running.",
       }
     }
 
@@ -55,7 +59,13 @@ export function normalizeApiError(error) {
     // Prefer the backend's named error code where it disambiguates better
     // than the raw HTTP status alone (per FRONTEND_CONTRACT.md §1).
     if (errorCode === 'llm_unavailable' || status === 503) {
-      return { status, kind: 'unavailable', message: 'The assistant is temporarily unavailable. Please try again shortly.', detail, requestId }
+      return {
+        status,
+        kind: 'unavailable',
+        message: detail || 'The AI assistant is temporarily unavailable. Please configure API keys or try again shortly.',
+        detail,
+        requestId,
+      }
     }
     if (errorCode === 'rate_limit_exceeded' || status === 429) {
       return { status, kind: 'rate_limited', message: "You've hit the rate limit — please wait a moment and try again.", detail, requestId }

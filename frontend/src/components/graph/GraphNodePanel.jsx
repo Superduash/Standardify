@@ -102,7 +102,7 @@ export function GraphNodePanel({
       role="region"
       aria-label={`Node details for ${node.id}`}
       className={cn(
-        'rounded-[var(--radius-lg)] border border-border bg-surface/95 p-5 shadow-xl backdrop-blur-xs space-y-4 text-left animate-in slide-in-from-right-2 duration-150',
+        'rounded-[var(--radius-lg)] border border-border bg-surface/95 p-5 shadow-xl backdrop-blur-xs space-y-4 text-left animate-panel-in transition-all duration-150',
         className
       )}
     >

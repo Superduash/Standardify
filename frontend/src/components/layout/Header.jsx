@@ -51,9 +51,10 @@ export function Header() {
             href="https://github.com/Superduash/Standardify"
             target="_blank"
             rel="noreferrer"
-            className="hidden rounded-[var(--radius-md)] border border-border px-3 py-2 text-sm font-medium text-text-body transition-colors hover:bg-bg sm:inline-flex"
+            className="hidden items-center gap-1.5 rounded-[var(--radius-md)] border border-border/80 bg-surface px-3 py-1.5 text-xs font-medium text-text-body shadow-2xs transition-colors hover:border-border hover:bg-bg hover:text-text sm:inline-flex"
+            aria-label="View source code on GitHub (opens in new tab)"
           >
-            View source
+            <span>GitHub</span>
           </a>
           <button
             type="button"

@@ -51,10 +51,18 @@ def _clean_response_text(text: str) -> str:
     return cleaned.strip()
 
 
+def _is_valid_key(key: Optional[str]) -> bool:
+    """Check if an API key is present and not a default placeholder."""
+    if not key or not key.strip():
+        return False
+    val = key.strip().lower()
+    return val not in ("your_groq_api_key_here", "your_gemini_api_key_here", "none", "null", "placeholder", "")
+
+
 def _call_groq(prompt: str) -> str:
     """Call Groq API with tenacity-based transient error retry."""
-    if not settings.groq_api_key or settings.groq_api_key == "your_groq_api_key_here":
-        raise ValueError("Groq API key is not configured.")
+    if not _is_valid_key(settings.groq_api_key):
+        raise ValueError("GROQ_API_KEY is not configured in backend/.env.")
 
     from groq import Groq
 
@@ -86,8 +94,8 @@ def _call_groq(prompt: str) -> str:
 
 def _call_gemini(prompt: str) -> str:
     """Call Google Gemini API using modern google-genai SDK."""
-    if not settings.gemini_api_key or settings.gemini_api_key == "your_gemini_api_key_here":
-        raise ValueError("Gemini API key is not configured.")
+    if not _is_valid_key(settings.gemini_api_key):
+        raise ValueError("GEMINI_API_KEY is not configured in backend/.env.")
 
     from google import genai
 
@@ -114,7 +122,7 @@ def generate_answer(prompt: str) -> LLMResult:
         LLMResult: Output containing generated answer, provider, and latency.
 
     Raises:
-        LLMUnavailableError: If both primary and fallback providers fail.
+        LLMUnavailableError: If both primary and fallback providers fail or are unconfigured.
     """
     start_time = time.time()
     errors: list[str] = []
@@ -172,5 +180,6 @@ def generate_answer(prompt: str) -> LLMResult:
     joined_errs = "; ".join(errors)
     logger.critical("All LLM providers failed (%d ms): %s", total_elapsed_ms, joined_errs)
     raise LLMUnavailableError(
-        f"All LLM providers are currently unavailable. Details: {joined_errs}"
+        f"All AI inference providers are currently unavailable ({joined_errs}). "
+        f"Standards Search, Registry, Gap Checker, and Graph remain fully available."
     )
